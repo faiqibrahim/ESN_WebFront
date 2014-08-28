@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html ng-app="esn">
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>E-learning Social Network</title>
+    <script src="angular.js"></script>
+    <script src="ngmodules/angular-route.js"></script>
+    <script>
+        angular.module('esn', ['ngRoute']);
+        angular.module('esn').config(function ($routeProvider) {
+
+        });
+    </script>
+    <script src="controllers/esnControllers.js"></script>
+    <link href="css/bootstrap.css" rel="stylesheet" type="text/css"/>
+    <link href="css/bootstrap-theme.css" rel="stylesheet" type="text/css"/>
+    <link href="css/custom.css" rel="stylesheet" type="text/css"/>
+
+</head>
+<body ng-controller="mainCtrl">
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">E-learning Social Network</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+            <form class="navbar-form navbar-left" role="search">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Search..">
+                </div>
+                <button type="submit" class="btn btn-default">Search</button>
+            </form>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Profile</a></li>
+                <li><a href="#">Connections</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Settings<span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Action</a></li>
+                        <li><a href="#">Another action</a></li>
+                        <li><a href="#">Something else here</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container-fluid -->
+</nav>
+<div class="row">
+    <div class="col-xs-3"></div>
+<div class="well well-lg col-xs-6">
+
+</div>
+    <div class="col-xs-3"></div>
+</div>
+<div class="panel panel-body container-fluid row">
+    <div class="col-xs-2 panel">
+        <div class="text-center" ng-repeat="post in data.posts">
+            {{post.title}}
+        </div>
+    </div>
+    <div class="col-xs-8 panel">
+        <div class="text-center" ng-repeat="post in data.posts">
+            {{post.post}}
+        </div>
+    </div>
+    <div class="col-xs-2 panel">
+        <div class="text-center" ng-repeat="post in data.posts">
+            {{post.description}}
+        </div>
+    </div>
+</div>
+</body>
+<script src="js/jquery-2.1.1.min.js"></script>
+<script src="js/bootstrap.js"></script>
+</html>
