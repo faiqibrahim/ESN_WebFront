@@ -1,0 +1,12 @@
+<h3 class="brushscript darkgreen text-center">Suggestions</h3>
+<ul class="nav nav-stacked border_left_black">
+    <li class="border_bottom_lightgrey" ng-repeat="course in data.courses">
+        <a ng-click="selectCourse(course.id)" class="btn">
+                    <span class="text-center">{{course.title}}
+                        <br/>
+                    <small class="text-left">{{"by "+course.owner}}</small>
+                    </span>
+
+        </a>
+    </li>
+</ul>

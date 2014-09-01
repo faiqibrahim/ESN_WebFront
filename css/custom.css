@@ -1,3 +1,21 @@
-.lightgreen{
-    background-color: lightgreen;
+.brushscript{
+    font-family: "Brush Script MT", cursive;
+}
+.border_right_black{
+    border-right: 1px solid black;
+}
+.border_left_black{
+    border-left: 1px solid black;
+}
+.border_bottom_grey{
+    border-bottom: 1px solid grey;
+}
+.border_bottom_lightgrey{
+    border-bottom: 1px solid lightgray;
+}
+.darkgreen{
+    color:darkgreen;
+}
+.darkgreen-background{
+    background-color: darkgreen;
 }
