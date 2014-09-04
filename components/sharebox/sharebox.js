@@ -38,4 +38,30 @@ angular.module('sharebox', [])
             }
         }
 
+    })
+    .directive('classbox', function () {
+        return {
+            restrict: 'E',
+            templateUrl: 'components/sharebox/classbox.html',
+            controller: function ($scope, courses) {
+                $scope.views = ['Announcement', 'Task', 'Content'];
+                $scope.selectedBox = $scope.views[0];
+                $scope.selectBox = function (index) {
+                    if (index > $scope.views.length || index < 0) {
+                        $scope.selectedBox = $scope.views[0];
+                    }
+                    else {
+                        $scope.selectedBox = $scope.views[index];
+                    }
+                };
+                $scope.getActiveClass = function (item) {
+                    return item == $scope.selectedBox ? 'btn-primary' : "";
+                };
+                $scope.selectedCourse = function () {
+                    return courses.getSelectedCourse();
+                };
+
+            }
+        }
+
     });

@@ -1,7 +1,7 @@
 /**
  * Created by Ibrahim on 8/28/2014.
  */
-angular.module('esn').controller('mainCtrl', function ($scope, $http, courses,$location) {
+angular.module('esn').controller('mainCtrl', function ($scope, $http) {
     var posts = [
         {title: '1st Post', description: 'This is our first post', post: "And its Blah blah"},
         {title: '2nd Post', description: 'This is our second post', post: "And its Blah blah again"},
@@ -11,7 +11,6 @@ angular.module('esn').controller('mainCtrl', function ($scope, $http, courses,$l
 
     $scope.data = {};
     $scope.data.posts = posts;
-    $scope.data.courses = courses.getCourses();
     $scope.data.files = [];
 
     $scope.test = function (data) {
@@ -25,12 +24,7 @@ angular.module('esn').controller('mainCtrl', function ($scope, $http, courses,$l
         $scope.data.files.push(args);
     });
 
-    $scope.selectCourse = function (id) {
 
-        courses.setSelectedCourse(id);
-        $location.path('/course');
-
-    };
 
 })
     .filter('custom', function () {

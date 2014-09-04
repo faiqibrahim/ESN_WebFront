@@ -1,0 +1,20 @@
+<form role="form" class="text-center">
+    <span class="copperplate text-center darkgreen text-size-24px">{{selectedCourse().title}}</span>
+    <div class="form-group" ng-show="selectedBox=='Announcement'">
+        <textarea class="form-control" id="classbox_announcement" placeholder="Make Announcement..."
+                  ng-model="classbox_announcement"></textarea>
+    </div>
+
+    <div class="form-group" ng-show="selectedBox=='Task'">
+        <textarea class="form-control" id="classbox_task" placeholder="Create Task..."
+                  ng-model="classbox_task"></textarea>
+    </div>
+    <span class="btn-group">
+        <a class="btn btn-default" ng-repeat="view in views" ng-click="selectBox($index)"
+           ng-class="getActiveClass(view)">{{view}}</a>
+    </span>
+    <span>
+        <a class="btn btn-success pull-right" ng-click="">Create</a>
+    </span>
+
+</form>

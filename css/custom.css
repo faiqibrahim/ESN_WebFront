@@ -1,21 +1,60 @@
-.brushscript{
+.brushscript {
     font-family: "Brush Script MT", cursive;
 }
-.border_right_black{
+
+.copperplate {
+    font-family: Copperplate, "Copperplate Gothic Light", fantasy;
+}
+
+.border_right_black {
     border-right: 1px solid black;
 }
-.border_left_black{
+
+.border_left_black {
     border-left: 1px solid black;
 }
-.border_bottom_grey{
+
+.border_bottom_grey {
     border-bottom: 1px solid grey;
 }
-.border_bottom_lightgrey{
+
+.border_bottom_lightgrey {
     border-bottom: 1px solid lightgray;
 }
-.darkgreen{
-    color:darkgreen;
+
+.darkgreen {
+    color: darkgreen;
 }
-.darkgreen-background{
+
+.darkgreen-background {
     background-color: darkgreen;
+}
+
+.text-size-24px {
+    font-size: 24px;
+}
+
+.text-size-16px {
+    font-size: 16px;
+}
+
+.post_pic {
+    max-height: 50px;
+    max-width: 50px;
+}
+.timesnewroman{
+    font-family: "Times New Roman";
+}
+.padding-left-10px{
+    padding-left: 10px;
+}
+.blink {
+    animation: blink 1s steps(5, start) infinite;
+    -webkit-animation: blink 1s steps(5, start) infinite;
+}
+@keyframes blink {
+    to { visibility: hidden; }
+}
+@-webkit-keyframes blink {
+    to { visibility: hidden; }
 }
