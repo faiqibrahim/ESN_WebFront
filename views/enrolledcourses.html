@@ -1,11 +1,11 @@
 <div ng-controller="coursesListCtrl">
     <h3 class="brushscript darkgreen text-center">Enrolled Courses</h3>
     <ul class="nav nav-stacked border_right_black">
-        <li class="border_bottom_lightgrey" ng-repeat="course in data.courses">
+        <li class="border_bottom_lightgrey" ng-repeat="course in data.courses()">
             <a ng-click="selectCourse(course.id)" class="btn">
                     <span class="text-center">{{course.title}}
                         <br/>
-                    <small class="text-left">{{"by "+course.owner}}</small>
+                    <small class="text-left">{{"by "+course.owner.firstname}}</small>
                     </span>
             </a>
         </li>

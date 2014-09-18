@@ -1,4 +1,7 @@
 <ng-include src="'views/sharebox.html'"></ng-include>
-<div class="text-center" ng-repeat="post in data.posts">
-    {{post.post}}
+<div class="text-center well" ng-repeat="post in data.posts|wall_posts">
+
+    <span class="lead">{{post.post}}</span>
+    <a class="btn btn-sm btn-danger pull-right" ng-click="deletePost(post)">Delete Post</a>
+
 </div>

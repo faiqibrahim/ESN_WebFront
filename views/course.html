@@ -6,13 +6,15 @@
     <ng-include src="'views/classbox.html'"></ng-include>
 
     <div class="panel">
-        <div class="well" ng-repeat="post in getCoursePosts()|filter:categoryFilterFn">
+        <div class="well" ng-repeat="post in data.posts|course_posts|filter:categoryFilterFn">
             <div>
-                <img class="pull-left img-responsive post_pic img-responsive" ng-src="{{users[post.user_id].photo}}"/>
-                <a class="copperplate pull-right" ng-click="setActiveView(post.post_type)">{{post.post_type}}</a>
+                <img class="pull-left img-responsive post_pic img-responsive" ng-src="{{_user.photo}}"/>
+                <a class="copperplate pull-right" ng-click="setActiveView(post.type)">{{post.type}}</a>
+                <br />
+                <a class="btn btn-sm btn-danger pull-right" ng-click="deletePost(post)">Delete</a>
             </div>
             <div class="padding-left-10px">
-                <span class="text-center brushscript text-size-16px darkgreen">{{users[post.user_id].name}}</span>
+                <span class="text-center brushscript text-size-16px darkgreen">{{loggedInUser.firstname+" "+loggedInUser.lastname}}</span>
                 <br/>
                 <span class="glyphicon glyphicon-chevron-right"></span>
                 <span class="lead timesnewroman">{{post.post}}</span>

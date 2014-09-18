@@ -60,6 +60,19 @@ angular.module('sharebox', [])
                 $scope.selectedCourse = function () {
                     return courses.getSelectedCourse();
                 };
+                $scope.addCoursePost = function () {
+                    if ($scope.selectedBox === 'Announcement') {
+                        var post = $scope.classbox_announcement;
+                        var newPost = {post: post, type: 'Announcements'};
+                        $scope.$emit('CoursePostAdded', newPost);
+                    }
+                    else if ($scope.selectedBox === 'Task') {
+                        var post = $scope.classbox_task;
+                        var newPost = {post: post, type: 'Tasks'};
+                        $scope.$emit('CoursePostAdded', newPost);
+                    }
+                };
+
 
             }
         }

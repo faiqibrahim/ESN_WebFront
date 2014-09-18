@@ -1,5 +1,6 @@
 <form role="form" class="text-center">
     <span class="copperplate text-center darkgreen text-size-24px">{{selectedCourse().title}}</span>
+
     <div class="form-group" ng-show="selectedBox=='Announcement'">
         <textarea class="form-control" id="classbox_announcement" placeholder="Make Announcement..."
                   ng-model="classbox_announcement"></textarea>
@@ -14,7 +15,7 @@
            ng-class="getActiveClass(view)">{{view}}</a>
     </span>
     <span>
-        <a class="btn btn-success pull-right" ng-click="">Create</a>
+        <a class="btn btn-success pull-right" ng-click="addCoursePost()">Create</a>
     </span>
 
 </form>
