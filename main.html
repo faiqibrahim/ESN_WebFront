@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Welcome to ESN</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/cover.css" rel="stylesheet">
+    <script type="text/javascript" src="angular.js"></script>
+    <script>
+        angular.module('userHandler', [])
+                .controller('loginCtrl', function ($scope) {
+                    $scope.data = {};
+
+                })
+                .controller('registrationCtrl', function ($scope, $http) {
+                    $scope.data = {};
+                    $scope.data.form = {};
+                    $scope.register = function () {
+                        var registrationUrl = "http://localhost/backend/users/add/";
+                        var user = {};
+                        user.firstname = $scope.data.first_name;
+                        user.lastname = $scope.data.last_name;
+                        user.email = $scope.data.email;
+                        user.username = $scope.data.username;
+                        user.password = $scope.data.password;
+                        $http.post(registrationUrl, user).success(function (data) {
+                            console.log(data);
+                        }).error(function (error) {
+                            console.log(error);
+                        });
+
+                    };
+
+                });
+    </script>
+</head>
+
+<body ng-app="userHandler">
+
+<div class="cover-title">
+    <h1>E-Learning Social Network - ESN</h1>
+</div>
+<div class="cover-content">
+    <div class="row container-fluid">
+        <div class="col-lg-5 cover-forms">
+            <div class="login-form" ng-controller="loginCtrl">
+                <h2 class="color-black">Login</h2>
+
+                <form class="form-inline" role="form">
+                    <input class="form-control" type="text" placeholder="Username" id="username">
+                    <input type="password" class="form-control" id="password" placeholder="Password">
+
+                    <div class="checkbox">
+                        <label class="color-black">
+                            <input type="checkbox"> Remember me
+                        </label>
+                    </div>
+                    <a href="#" class="btn btn-sm btn-primary">Sign in</a>
+
+                </form>
+            </div>
+            <div class="register-form color-black" ng-controller="registrationCtrl">
+                <h2>or Register</h2>
+
+                <form class="form-horizontal" role="form" name="registrationForm" novalidate>
+                    <div class="form-group">
+                        <label for="first_name" class="col-sm-2 control-label">First Name</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="first_name" id="first_name"
+                                   placeholder="First Name" ng-model="data.first_name" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="last_name" class="col-sm-2 control-label">Last Name</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="last_name" id="last_name"
+                                   placeholder="Last Name" ng-model="data.last_name" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="_username" class="col-sm-2 control-label">Username</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="username" id="_username"
+                                   placeholder="Username"
+                                   ng-model="data.username" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="col-sm-2 control-label">Email</label>
+
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control" name="email" id="email" placeholder="Email"
+                                   ng-model="data.email" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="_password" class="col-sm-2 control-label">Password</label>
+
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" name="password" id="_password"
+                                   placeholder="Password" ng-model="data.password" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="_password2" class="col-sm-2 control-label">Re-enter Password</label>
+
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" name="re_password" id="_password2"
+                                   placeholder="Re-enter Password" ng-model="data.re_password" required>
+                            <span class="label-warning pull-left" ng-show="data.password!=data.re_password;">Passwords do not match</span>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <a type="submit" class="btn btn-primary"
+                               ng-disabled="registrationForm.$invalid || data.password!=data.re_password "
+                               ng-click="register()">Join</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-lg-3">
+
+        </div>
+        <div class="col-lg-4 cover-desc myfont">
+
+            <h2>Welcome to ESN.</h2>
+            Join ESN
+            be a part of a growing educational network, share knowledge without any restriction of time or place.
+
+        </div>
+    </div>
+</div>
+<div class="panel-footer container-fluid text-center">
+    Site Developed by IMA Developers
+</div>
+
+</body>
+</html>
