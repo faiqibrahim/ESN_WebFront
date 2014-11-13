@@ -1,7 +1,7 @@
 /**
  * Created by Ibrahim on 8/28/2014.
  */
-angular.module('esn').controller('mainCtrl', function ($scope, $http) {
+angular.module('esn.com').controller('mainCtrl', function ($scope, $http) {
     $scope.data = {};
     $http.get('http://localhost:5500/users')
         .success(function (data) {
