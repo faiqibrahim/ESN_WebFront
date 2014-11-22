@@ -72,3 +72,7 @@
 @-webkit-keyframes blink {
     to { visibility: hidden; }
 }
+.my-font{
+    font-family: "NovecentowideBookBold", Georgia, "Times New Roman", Times, serif;
+    text-transform: capitalize;
+}

@@ -1,1 +1,79 @@
-I Am your Profile Page
+
+
+<style>
+    .profile-header {
+        padding-bottom: 10px;
+        border-bottom: 1px solid darkgreen;
+        overflow: auto;
+        margin: 2px;
+    }
+
+    .profile-cover {
+        position: relative;
+    }
+
+    .profile-cover > img {
+        width: 900px;
+        height: 300px;
+    }
+
+    .profile-data {
+        position: relative;
+        overflow: visible;
+        z-index: 1;
+    }
+
+    .profile-data > img {
+        position: relative;
+        float: left;
+        margin-top: -70px;
+        margin-left: 20px;
+    }
+
+    .profile-data > h1 {
+        position: relative float : left;
+        clear: right;
+        font-family: "NovecentowideBookBold", Georgia, "Times New Roman", Times, serif;
+        padding: 10px;
+        overflow: auto;
+    }
+
+    .profile-tagline {
+        position: relative;
+        float: left;
+        clear: right;
+    }
+</style>
+<div>
+    <navbar></navbar>
+</div>
+<div class="row container-fluid">
+    <div class="col-lg-2">
+
+    </div>
+    <div class="col-lg-8 panel">
+        <div class="profile-header" ng-controller="profileCtrl">
+            <div class="profile-cover">
+                <img src="http://esn.com/Data/Thumbs/cover.jpg" class="img-responsive img-rounded"/>
+            </div>
+            <div class="profile-data">
+                <img src="http://esn.com/Data/Thumbs/profile.jpg" class="img-responsive img-circle"/>
+
+                <h1 class="">Ibraheem Faiq</h1>
+                <span class="profile-tagline timesnewroman">I aspire for a challenging position in a professional organization</span>
+            </div>
+        </div>
+        <div ng-controller="profileCtrl">
+            <div ng-controller="profileMenuCtrl">
+                <ng-include src="'./views/profilemenu.html'"></ng-include>
+            </div>
+            <div>
+
+                <div ng-include="data.view"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-2">
+
+    </div>
+</div>

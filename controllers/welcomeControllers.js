@@ -119,4 +119,30 @@ angular.module('esn')
             });
         };
 
+    }).controller('profileCtrl', function ($scope) {
+        $scope.data = {};
+        $scope.data.view='';
+        $scope.updateView = function (view) {
+            if (view == 'Posts') {
+                $scope.data.view = './views/profile_posts.html';
+            }
+
+        };
+
+    }).controller('profileMenuCtrl', function ($scope) {
+        var $menus = ['Posts', 'Interests', 'About', 'Groups', 'Blah'];
+        var $selectedMenu = $menus[0];
+        $scope.data = {};
+        $scope.data.menus = $menus;
+
+        $scope.selectMenu = function (index) {
+            if (index >= 0 && index < $scope.data.menus.length) {
+                $selectedMenu = $scope.data.menus[index];
+                $scope.updateView($selectedMenu);
+            }
+        };
+        $scope.getActiveClass = function (menu) {
+            return menu == $selectedMenu ? 'active' : '';
+        }
     });
+;

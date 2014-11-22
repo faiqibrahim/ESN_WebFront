@@ -1,0 +1,19 @@
+<style>
+    .fileupload-icon {
+        position: relative;
+        z-index: 2;
+        opacity: 0.8;
+        margin-top: -10px;
+    }
+
+    .fileupload-icon:hover {
+        opacity: 1;;
+    }
+</style>
+<div class="fileupload-icon pull-left">
+    <input type="file" ng-model="file" class="btn" ng-change="upload();" value="" multiple/>
+    <span class="glyphicon glyphicon-upload"></span>
+
+</div>
+<span ng-repeat="fil in file">{{fil}}</span>
+

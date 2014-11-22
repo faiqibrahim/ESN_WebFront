@@ -13,14 +13,23 @@
 
     <!-- Custom styles for this template -->
     <link href="css/cover.css" rel="stylesheet">
+
+    <link href="css/custom.css" rel="stylesheet">
+
+
     <!-- Angularjs Core Files -->
     <script type="text/javascript" src="angular.js"></script>
+
+
+    <!--Angularjs Dependency Modules -->
     <script type="text/javascript" src="ngmodules/angular-route.js"></script>
+    <script type="text/javascript" src="components/navbar/navbar.js"></script>
+    <script type="text/javascript" src="components/fileupload/fileupload.js"></script>
 
 
     <!--Starting Angularjs App  -->
     <script>
-        angular.module('esn', ['ngRoute']);
+        var esn=angular.module('esn', ['ngRoute', 'navbar','fileupload']);
     </script>
 
     <!-- Routes -->

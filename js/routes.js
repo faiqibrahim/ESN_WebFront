@@ -12,6 +12,6 @@ angular.module('esn').config(function ($routeProvider, $locationProvider) {
     $routeProvider.when('/profile', {templateUrl: './views/profile.html'});
 
     $routeProvider.otherwise({templateUrl: 'views/welcome.html'});
-    $locationProvider.html5Mode(true);
+    $locationProvider.html5Mode(false);
 
 });
