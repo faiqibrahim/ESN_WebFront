@@ -1,0 +1,37 @@
+<style>
+    .profile-interest {
+        margin-bottom: 20px;
+    }
+</style>
+<div class="panel" ng-controller="interestsCtrl">
+    <h1 class="myfont center-text">Interests</h1>
+
+    <div class=" form-group col-md-4 row pull-right">
+        <div class="col-md-10" angucomplete-alt id="interests"
+             placeholder="Add Interest"
+             pause="200"
+             selected-object="data.selectedInterest"
+             remote-url="http://esnback.com/interests/find.json?s="
+             remote-url-data-field="interests"
+             title-field="Interest.interest"
+             input-class="form-control form-control-small" ng-model="selectedInterest"></div>
+        <a class="btn col-md-2" ng-click="addInterest()">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+        </a>
+    </div>
+
+
+    <div class="row center-text">
+
+        <div class="col-md-4 profile-interest" ng-repeat="interest in data.interests">
+            <a class="btn btn-success">{{interest.interest}}</a> <a class="btn"
+                                                                    ng-click="deleteInterest(interest.id,$index)"
+                                                                    ng-show="selfProfile">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+        </a>
+        </div>
+
+
+    </div>
+
+</div>

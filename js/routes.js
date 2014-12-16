@@ -9,9 +9,23 @@ angular.module('esn').config(function ($routeProvider, $locationProvider) {
 
     $routeProvider.when('/home', {templateUrl: './views/home.html'});
 
-    $routeProvider.when('/profile', {templateUrl: './views/profile.html'});
+    $routeProvider.when('/profile/:userID', {templateUrl: './views/profile.html'});
+
+    $routeProvider.when('/create-group', {templateUrl: './views/group-create.html'});
+    $routeProvider.when('/group/:groupId', {templateUrl: './views/group.html'});
+
 
     $routeProvider.otherwise({templateUrl: 'views/welcome.html'});
     $locationProvider.html5Mode(false);
 
+}).run(function ($rootScope, $location, $Auth) {
+    $rootScope.$on("$routeChangeStart", function (event, next, current) {
+        if (!$Auth.isAuthenticated()) {
+            // no logged user, redirect to /login
+            if (next.templateUrl === "./views/welcome.html") {
+            } else {
+                $location.path("/welcome");
+            }
+        }
+    });
 });

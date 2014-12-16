@@ -40,14 +40,15 @@
                     return {
                         uploadFileToUrl: function (file, uploadUrl) {
                             var fd = new FormData();
-                            fd.append('file', file);
+                            fd.append('profile_photo', file);
+							console.log(fd);
                             $http.post(uploadUrl, fd, {
                                 transformRequest: angular.identity,
                                 headers: {'Content-Type': undefined}
                             })
                                     .success(function (data) {
                                         console.log(data);
-                                        files.push(data.files[0]);
+                                        files.push(data.files);
                                     })
                                     .error(function (error) {
                                         console.log(error);
@@ -64,7 +65,7 @@
 
                         var file = $scope.myFile;
 
-                        var uploadUrl = 'http://esn.com/upload.php';
+                        var uploadUrl = 'http://esnback.com/users/addProfilePhoto.json';
 
                         for (var i = 0; i < file.length; i++) {
                             fileUpload.uploadFileToUrl(file[i], uploadUrl);

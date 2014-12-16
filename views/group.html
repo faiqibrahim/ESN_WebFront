@@ -1,0 +1,91 @@
+<style>
+    .profile-header {
+        padding-bottom: 10px;
+        border-bottom: 1px solid darkgreen;
+        overflow: auto;
+        margin: 2px;
+    }
+
+    .profile-cover {
+        position: relative;
+    }
+
+    .profile-cover > img {
+        width: 900px;
+        height: 300px;
+    }
+
+    .profile-data {
+        position: relative;
+        overflow: visible;
+        z-index: 1;
+    }
+
+    .profile-data > img {
+        position: relative;
+        float: left;
+        margin-top: -70px;
+        margin-left: 20px;
+    }
+
+    .profile-data > h1 {
+        position: relative float : left;
+        clear: right;
+        font-family: "NovecentowideBookBold", Georgia, "Times New Roman", Times, serif;
+        padding: 10px;
+        overflow: auto;
+    }
+
+    .profile-tagline {
+        position: relative;
+        float: left;
+        clear: right;
+    }
+
+    .profile-photo-upload > input {
+        display: none;
+
+    }
+
+    .profile-photo-upload {
+        overflow: hidden;
+        width: 40px;
+        position: relative;
+        float: left;
+    }
+
+    .cover-photo-upload > input {
+        display: none;
+
+    }
+
+    .cover-photo-upload {
+        overflow: hidden;
+        width: 40px;
+        position: relative;
+        float: right;
+        z-index: 2;
+    }
+</style>
+{{Auth.user}}
+<div class="row container-fluid">
+    <div class="col-lg-2">
+
+    </div>
+    <div class="col-lg-8 panel" ng-controller="GroupController">
+        <h1 class="my-font center-text darkgreen">{{Group.groupData.title}}</h1>
+        <p class="lead my-font font-size-12 center-text">{{Group.groupData.description}}</p>
+        <div>
+            <div ng-controller="GroupMenuController">
+                <ng-include src="'./views/groupmenu.html'"></ng-include>
+            </div>
+            <div>
+
+                <div ng-include="data.view"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-2">
+
+    </div>
+</div>

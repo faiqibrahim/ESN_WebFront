@@ -1,0 +1,67 @@
+<style>
+    .group-post {
+        box-shadow: 10px 10px 5px #888888;
+    }
+
+    .group-info {
+        position: relative;
+        overflow: auto;
+        text-align: center;
+        padding: 10px;
+    }
+
+    .group-info > img {
+        position: relative;
+        float: left;
+        width: 50px;
+    }
+
+    .group-info > h4 {
+        position: relative;
+        float: left;
+        clear: right;
+        margin-left: 5px;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .group-posts {
+        padding: 30px;
+        padding-right: 60px;
+    }
+
+    .content-space {
+        clear: left;
+        font-weight: normal;
+        font-size: 14px;
+    }
+
+    .group-by {
+        padding: 10px;
+        font-size: 12px;
+        clear: both;
+        position: relative;
+        float: left;
+    }
+</style>
+<div class="row group-posts">
+    <div class=" col-md-5 col-md-offset-1 panel box-shadow-green " ng-repeat="group in Auth.user.Group">
+
+        <div class="group-info">
+
+            <h2 class="my-font darkgreen font-size-16"><a class="darkgreen underline"
+                    ng-href="http://esn.com/#/group/{{group.id}}">{{group.title}}</a></h2>
+
+        <!--    <div class="group-by">By: {{Auth.user.User.firstname}}</div> -->
+        </div>
+        <div class="content-space timesnewroman center-text">
+            <p class="lead timesnewroman font-size-12">{{group.description}}</p>
+
+        </div>
+    </div>
+
+
+</div>
+
+
+</div>

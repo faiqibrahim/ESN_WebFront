@@ -1,0 +1,70 @@
+<style>
+    .announcement {
+
+    }
+
+    .announcement h2 {
+        position:relative;
+        float: left;
+    }
+    .content-space {
+        clear: left;
+        font-weight: normal;
+        font-size: 14px;
+    }
+</style>
+<div ng-controller="GroupAnnouncementsController">
+    <div class="row">
+        <div class="col-lg-1">
+
+        </div>
+        <div class="col-lg-10">
+            <div class="row margin-5px">
+                <div class="col-lg-1">
+
+                </div>
+                <div class="col-lg-10">
+                    <div class="well postadder center" ng-show="groupOwner">
+                        <div class="my-font darkgreen center-text center">Make Announcement</div>
+                        <div class="form-group">
+                            <label>Title</label>
+                            <input type="text" ng-model="new_title" class="form-control"/>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                Description
+                            </label>
+                            <textarea class="form-control" id="sharebox_text" placeholder="Share Something..."
+                                      ng-model="new_description"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <a class="btn btn-success" ng-click="addAnnouncement()">Add</a>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-lg-1">
+
+                </div>
+            </div>
+
+
+            <div class="panel padding-10 margin-5px my-font box-shadow-red announcement"
+                 ng-repeat="announcement in data.announcements|reverse">
+                <h2 class="darkgreen "><span class="">{{announcement.title}}</span></h2>
+                <a class="btn"
+                   ng-click="deleteAnnouncement(announcement.id,$index)"
+                     ng-show="groupOwner"   >
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                </a>
+
+                <p class="lead timesnewroman font-size-12 content-space">{{announcement.announcement}}</p>
+                <span class="small">{{announcement.modified}}</span>
+            </div>
+        </div>
+        <div class="col-lg-1">
+        </div>
+    </div>
+
+
+</div>
