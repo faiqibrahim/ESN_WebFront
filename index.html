@@ -15,9 +15,10 @@
     <link href="css/cover.css" rel="stylesheet"/>
 
     <link href="css/custom.css" rel="stylesheet"/>
-    <link href="components/ng-ckeditor-master/ng-ckeditor.css" rel="stylesheet"/>
-    <link href="components/click-to-edit/css/xeditable.css" rel="stylesheet"/>
 
+    <!-- jQuery and Bootstrap JS -->
+    <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.js"></script>
 
     <!-- Angularjs Core Files -->
     <script type="text/javascript" src="angular.js"></script>
@@ -25,26 +26,28 @@
 
     <!--Angularjs Dependency Modules -->
     <script type="text/javascript" src="ngmodules/angular-route.js"></script>
+    <script type="text/javascript" src="ngmodules/angular-cookies.js"></script>
     <script type="text/javascript" src="ngmodules/angular-local-storage.min.js"></script>
     <script type="text/javascript" src="components/navbar/navbar.js"></script>
     <script type="text/javascript" src="components/fileupload/fileupload.js"></script>
     <script type="text/javascript" src="controllers/esnFactories.js"></script>
     <script type="text/javascript" src="js/angucomplete-alt.js"></script>
     <script type="text/javascript" src="components/postadder/postadder.js"></script>
-    <script type="text/javascript" src="components/click-to-edit/js/xeditable.min.js"></script>
 
 
     <!--Starting Angularjs App  -->
     <script>
-        var esn = angular.module('esn', ['LocalStorageModule', 'ngRoute', 'navbar', 'fileupload', 'Auth', 'angucomplete-alt', 'postAdder', 'xeditable']);
+        var esn = angular.module('esn', ['LocalStorageModule','ngCookies', 'ngRoute', 'navbar', 'fileupload', 'Auth', 'angucomplete-alt', 'postAdder']);
         esn.config(function (localStorageServiceProvider) {
             localStorageServiceProvider
                     .setPrefix('esn')
                     .setStorageType('sessionStorage');
         });
-        esn.run(function (editableOptions) {
-            editableOptions.theme = 'bs3';
-        });
+        esn.config(['$httpProvider', function($httpProvider) {
+            $httpProvider.defaults.useXDomain = true;
+            $httpProvider.defaults.withCredentials=true;
+        }
+        ]);
 
     </script>
 
@@ -55,8 +58,10 @@
 
     <script src="controllers/esnControllers.js"></script>
     <script src="controllers/welcomeControllers.js"></script>
+    <script src="controllers/homeControllers.js"></script>
     <script src="controllers/profileControllers.js"></script>
     <script src="controllers/groupControllers.js"></script>
+    <script src="controllers/connectionsControllers.js"></script>
 
 
 

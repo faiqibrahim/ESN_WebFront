@@ -31,7 +31,9 @@ angular.module('navbar', [])
                     }
                     $location.path('/' + $path);
                 };
-
+                $scope.isAuthenticated=function(){
+                    return $Auth.isAuthenticated();
+                };
                 $scope.getActiveClass = function ($option) {
                     if ($option.title == currentLocation.title) {
                         return 'active-option';

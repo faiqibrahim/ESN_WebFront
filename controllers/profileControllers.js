@@ -5,13 +5,30 @@ angular.module('esn')
     .controller('profileCtrl', function ($scope, $http, $routeParams, $Auth, fileUpload) {
         $scope.selfProfile = false;
         $scope.Auth = {};
-        $scope.profile = {
-
-        };
+        $scope.profile = {};
+        $scope.connectedUser = false;
         $scope.test = $http.get('http://esnback.com/users/getByUsername/' + $routeParams.userID + '.json', {withCredentials: true})
             .success(function (data) {
-                console.log(data);
                 $scope.Auth.user = data.users;
+                $http.get('http://esnback.com/users/areConnected/' + $scope.Auth.user.User.id + '.json', {withCredentials: true})
+                    .success(function (data) {
+                        if (data.result.success) {
+                            $scope.connectedUser = true;
+                        }
+                    })
+                    .error(function (error) {
+                        console.log(error);
+                    });
+
+
+                $http.get('http://esnback.com/users/getJoinedGroups/' + $routeParams.userID + '.json', {withCredentials: true})
+                    .success(function (data) {
+                        if (data.result.success) {
+                            $scope.Auth.user.joinedGroups = data.result.groups;
+                        }
+                    }).error(function (error) {
+                        console.log(error);
+                    });
                 $scope.profile.user = $scope.Auth.user.User;
                 if ($scope.profile.user.id == $Auth.getUser('id')) {
                     $scope.selfProfile = true;
@@ -128,6 +145,33 @@ angular.module('esn')
 
         }
         ;
+        $scope.connectUser = function () {
+            var $formData = {
+                user_id: $Auth.getUser('id'),
+                username: $routeParams.userID
+            };
+            $http.post('http://esnback.com/users/addContact.json', $formData, {withCredentials: true})
+                .success(function (data) {
+                    if (data.result.success) {
+                        $scope.connectedUser = true;
+                    }
+                    console.log(data);
+                }).error(function (error) {
+                    console.log(error);
+                });
+        };
+
+        $scope.disconnectUser = function () {
+            $http.delete('http://esnback.com/users/deleteContact/' + $routeParams.userID + '.json', {withCredentials: true})
+                .success(function (data) {
+                    console.log(data);
+                    if (data.result.success) {
+                        $scope.connectedUser = false;
+                    }
+                }).error(function (error) {
+                    console.log(error);
+                });
+        };
 
     }).
     controller('profileMenuCtrl', function ($scope) {
@@ -222,7 +266,7 @@ angular.module('esn')
             posts: {}
         };
         var updatePosts = function () {
-            $http.post('http://esnback.com/posts/findByUser/' + $scope.profile.user.id + '.json', {withCredentials: true})
+            $http.post('http://esnback.com/posts/getForUserProfile/' + $scope.profile.user.id + '.json', {withCredentials: true})
                 .success(function (data) {
                     if (data.result.success) {
                         $scope.data.posts = data.result.posts;

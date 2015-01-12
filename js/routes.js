@@ -8,7 +8,7 @@ angular.module('esn').config(function ($routeProvider, $locationProvider) {
     $routeProvider.when('/welcome', {templateUrl: './views/welcome.html'});
 
     $routeProvider.when('/home', {templateUrl: './views/home.html'});
-
+    $routeProvider.when('/connections', {templateUrl: './views/connections.html'});
     $routeProvider.when('/profile/:userID', {templateUrl: './views/profile.html'});
 
     $routeProvider.when('/create-group', {templateUrl: './views/group-create.html'});

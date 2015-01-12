@@ -74,7 +74,13 @@
     </div>
     <div class="col-lg-8 panel" ng-controller="GroupController">
         <h1 class="my-font center-text darkgreen">{{Group.groupData.title}}</h1>
-        <p class="lead my-font font-size-12 center-text">{{Group.groupData.description}}</p>
+
+        <p class="lead my-font font-size-12 center-text">{{Group.groupData.description}}<span> <a
+                class="btn btn-sm btn-primary" ng-hide="groupOwner || groupJoined" ng-click="joinGroup()">Join Group</a></span>
+        <span> <a
+                class="btn btn-sm btn-danger" ng-show="groupJoined" ng-click="unJoinGroup()">UnJoin Group</a></span>
+        </p>
+
         <div>
             <div ng-controller="GroupMenuController">
                 <ng-include src="'./views/groupmenu.html'"></ng-include>

@@ -42,7 +42,10 @@
     }
 </style>
 <ul class="ngNavbar">
-    <li ng-repeat="option in menu.items" class="{{option.position}}" ng-class="getActiveClass(option)"><a
+    <div class="my-font color-white" ng-show="!isAuthenticated()">
+        <h1>E-Learning Social Network - ESN</h1>
+    </div>
+    <li ng-hide="!isAuthenticated()" ng-repeat="option in menu.items" class="{{option.position}}" ng-class="getActiveClass(option)"><a
             ng-click="changeLocation(option.index)">{{option.title}}</a></li>
 
 </ul>

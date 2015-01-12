@@ -1,10 +1,99 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
+<style>
+    .file-upload {
+        overflow: hidden;
+        position: relative;
+        float: left;
+    }
 
-</body>
-</html>
+    .file-upload > input {
+        display: none;
+    }
+</style>
+<div ng-controller="GroupTasksController" ng-show="groupOwner || groupJoined">
+    <div class="well center margin-5px" ng-show="groupOwner">
+        <div class="my-font darkgreen center-text center">Create Task</div>
+        <div class="form-group">
+            <label>Title</label>
+            <input type="text" ng-model="new_title" class="form-control"/>
+        </div>
+        <div class="form-group">
+            <label>
+                Description
+            </label>
+            <textarea class="form-control" id="sharebox_text" placeholder="Details..."
+                      ng-model="new_description"></textarea>
+        </div>
+        <div class="form-group">
+            <label>
+                Deadline:
+            </label>
+            <input class="form-control" type="datetime-local" id="exampleInput" name="input" ng-model="new_datetime"
+                   placeholder="yyyy-MM-ddTHH:mm:ss" min="2015-01-01T00:00:00" max="2020-12-31T00:00:00" required/>
+
+        </div>
+
+        <div class="form-group">
+            <div class="file-upload">
+                <label for="file-input">
+                    <span class="glyphicon glyphicon-file clickable form-control" aria-hidden="true"></span>
+                </label>
+                <input id="file-input" type="file" file-model="contentFile" multiple/>
+                <label>{{fileStatus}}</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <a class="btn btn-success" ng-click="createTask()">Create</a>
+        </div>
+
+    </div>
+    <div class="row margin-5px">
+        <div ng-repeat="task in tasks" class="box-shadow-green margin-5px padding-10">
+            <div>
+                <h1 class="my-font">{{task.Task.title}}</h1><a class="btn btn-success btn-sm" ng-show="groupOwner" ng-click="viewSolutions(task.Task.id)">View Solutions</a>
+
+                <span><a ng-href="{{task.Content.content}}" ng-show="task.Content.content">Download Attached
+                    File</a></span>
+
+                <div class="my-font">
+                    Deadline:
+                    <span class="label label-warning">
+                         {{task.Task.enddate}}
+                    </span>
+                </div>
+
+                <div class="clear">
+                    <p class="lead timesnewroman font-size-12 content-space">{{task.Task.description}}</p>
+                </div>
+                <span class="small">{{task.Task.modified}}</span>
+            </div>
+
+            <div class="form-group" ng-controller="GroupSolutionsController" ng-show="groupJoined">
+                <span class="hidden">{{solution_id=task.Solution.id}}</span>
+                <a ng-click="resubmitSolution()" ng-show="(!resubmit && task.Solution.id) || solutionUploaded">Solution
+                    Uploaded! Resubmit?</a>
+
+                <div ng-show="(!task.Solution.id || resubmit) && !solutionUploaded">
+                    <div class="form-group">
+                        <label>Solution</label>
+                        <textarea class="form-control" ng-model="new_solution"
+                                  placeholder="Enter details here.."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <div class="file-upload">
+                            <label>
+                                <span class="glyphicon glyphicon-file clickable form-control" aria-hidden="true"></span>
+
+                                <input class="hidden" type="file" file-model="solutionFile" multiple/>
+                            </label>
+                            <label>{{fileStatus}}</label>
+                        </div>
+                    </div>
+                    <a class="btn btn-primary" ng-click="submitSolution(task.Task.id)">Submit</a>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+</div>

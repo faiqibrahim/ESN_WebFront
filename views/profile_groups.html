@@ -16,7 +16,7 @@
         width: 50px;
     }
 
-    .group-info > h2 {
+    .group-info > h4 {
         position: relative;
         float: left;
         clear: right;
@@ -45,121 +45,18 @@
     }
 </style>
 <div class="row group-posts">
-    <div class=" col-md-5 col-md-offset-1 panel group-post ">
+    <div class=" col-md-5 col-md-offset-1 panel box-shadow-green " ng-repeat="group in Auth.user.joinedGroups">
 
         <div class="group-info">
-            <img class="img-rounded" src="./Data/Thumbs/profile.jpg"/>
 
-            <h2 class="timesnewroman">Web Engineering</h2>
+            <h2 class="my-font darkgreen font-size-16"><a class="darkgreen underline"
+                                                          ng-href="http://esn.com/#/group/{{group.Group.id}}">{{group.Group.title}}</a>
+            </h2>
 
-            <div class="group-by">By: Usman Akram</div>
+            <!--    <div class="group-by">By: {{Auth.user.User.firstname}}</div> -->
         </div>
-        <div class="content-space timesnewroman">
-            <p>Turn your 2D designs into high quality, 3D product shots in seconds using free Photoshop
-                actions by <a target="_blank" href="http://www.psdcovers.com/">PSDCovers</a>! Visit their website to
-                download some of their awesome, free photoshop actions!</p>
-
-        </div>
-    </div>
-
-    <div class=" col-md-5 col-md-offset-1 panel group-post ">
-
-        <div class="group-info">
-            <img class="img-rounded" src="./Data/Thumbs/profile.jpg"/>
-
-            <h2 class="timesnewroman">Web Engineering</h2>
-
-            <div class="group-by">By: Usman Akram</div>
-        </div>
-        <div class="content-space timesnewroman">
-            <p>Turn your 2D designs into high quality, 3D product shots in seconds using free Photoshop
-                actions by <a target="_blank" href="http://www.psdcovers.com/">PSDCovers</a>! Visit their website to
-                download some of their awesome, free photoshop actions!</p>
-
-        </div>
-    </div>
-
-    <div class=" col-md-5 col-md-offset-1 panel group-post ">
-
-        <div class="group-info">
-            <img class="img-rounded" src="./Data/Thumbs/profile.jpg"/>
-
-            <h2 class="timesnewroman">Web Engineering</h2>
-
-            <div class="group-by">By: Usman Akram</div>
-        </div>
-        <div class="content-space timesnewroman">
-            <p>Turn your 2D designs into high quality, 3D product shots in seconds using free Photoshop
-                actions by <a target="_blank" href="http://www.psdcovers.com/">PSDCovers</a>! Visit their website to
-                download some of their awesome, free photoshop actions!</p>
-
-        </div>
-    </div>
-
-    <div class=" col-md-5 col-md-offset-1 panel group-post ">
-
-        <div class="group-info">
-            <img class="img-rounded" src="./Data/Thumbs/profile.jpg"/>
-
-            <h2 class="timesnewroman">Web Engineering</h2>
-
-            <div class="group-by">By: Usman Akram</div>
-        </div>
-        <div class="content-space timesnewroman">
-            <p>Turn your 2D designs into high quality, 3D product shots in seconds using free Photoshop
-                actions by <a target="_blank" href="http://www.psdcovers.com/">PSDCovers</a>! Visit their website to
-                download some of their awesome, free photoshop actions!</p>
-
-        </div>
-    </div>
-
-    <div class=" col-md-5 col-md-offset-1 panel group-post ">
-
-        <div class="group-info">
-            <img class="img-rounded" src="./Data/Thumbs/profile.jpg"/>
-
-            <h2 class="timesnewroman">Web Engineering</h2>
-
-            <div class="group-by">By: Usman Akram</div>
-        </div>
-        <div class="content-space timesnewroman">
-            <p>Turn your 2D designs into high quality, 3D product shots in seconds using free Photoshop
-                actions by <a target="_blank" href="http://www.psdcovers.com/">PSDCovers</a>! Visit their website to
-                download some of their awesome, free photoshop actions!</p>
-
-        </div>
-    </div>
-
-    <div class=" col-md-5 col-md-offset-1 panel group-post ">
-
-        <div class="group-info">
-            <img class="img-rounded" src="./Data/Thumbs/profile.jpg"/>
-
-            <h2 class="timesnewroman">Web Engineering</h2>
-
-            <div class="group-by">By: Usman Akram</div>
-        </div>
-        <div class="content-space timesnewroman">
-            <p>Turn your 2D designs into high quality, 3D product shots in seconds using free Photoshop
-                actions by <a target="_blank" href="http://www.psdcovers.com/">PSDCovers</a>! Visit their website to
-                download some of their awesome, free photoshop actions!</p>
-
-        </div>
-    </div>
-
-    <div class=" col-md-5 col-md-offset-1 panel group-post ">
-
-        <div class="group-info">
-            <img class="img-rounded" src="./Data/Thumbs/profile.jpg"/>
-
-            <h2 class="timesnewroman">Web Engineering</h2>
-
-            <div class="group-by">By: Usman Akram</div>
-        </div>
-        <div class="content-space timesnewroman">
-            <p>Turn your 2D designs into high quality, 3D product shots in seconds using free Photoshop
-                actions by <a target="_blank" href="http://www.psdcovers.com/">PSDCovers</a>! Visit their website to
-                download some of their awesome, free photoshop actions!</p>
+        <div class="content-space timesnewroman center-text">
+            <p class="lead timesnewroman font-size-12">{{group.Group.description}}</p>
 
         </div>
     </div>

@@ -1,10 +1,62 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
+<style>
+    .file-upload {
+        overflow: hidden;
+    / / width : 40 px;
+        position: relative;
+        float: left;
+    }
 
-</body>
-</html>
+    .file-upload > input {
+        display: none;
+
+    }
+</style>
+<div ng-controller="GroupContentsController" ng-show="groupOwner || groupJoined">
+    <div class="well center margin-5px" ng-show="groupOwner">
+        <div class="my-font darkgreen center-text center">Upload Content</div>
+        <div class="form-group">
+            <label>Title</label>
+            <input type="text" ng-model="new_title" class="form-control"/>
+        </div>
+        <div class="form-group">
+            <label>
+                Description
+            </label>
+            <textarea class="form-control" id="sharebox_text" placeholder="Share Something..."
+                      ng-model="new_description"></textarea>
+        </div>
+
+        <div class="form-group">
+            <div class="file-upload">
+                <label for="file-input">
+                    <span class="glyphicon glyphicon-file clickable form-control" aria-hidden="true"></span>
+                </label>
+                <input id="file-input" type="file" file-model="contentFile" multiple/>
+                <label>{{fileStatus}}</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <a class="btn btn-success" ng-click="addContent()" ng-disabled="!$fileStatus.isUploaded">Upload</a>
+        </div>
+
+    </div>
+    <div class="row margin-5px">
+        <div ng-repeat="content in contents" class="box-shadow-green margin-5px padding-10">
+            <div>
+                <h1 class="my-font">{{content.Groupcontent.title}}<a class="btn"
+                                                                     ng-click="deleteContent(content.Groupcontent.id,$index)"
+                                                                     ng-show="groupOwner">
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                </a></h1>
+
+                <span><a ng-href="{{content.Content.content}}">Download</a></span>
+
+                <p class="lead timesnewroman font-size-12 content-space">{{content.Groupcontent.description}}</p>
+                <span class="small">{{content.Groupcontent.modified}}</span>
+            </div>
+
+
+        </div>
+    </div>
+
+</div>

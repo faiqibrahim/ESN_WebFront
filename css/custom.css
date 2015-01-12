@@ -44,6 +44,9 @@
 .center {
     margin: 1px auto 1px auto;
 }
+.color-white{
+    color:white;
+}
 
 .darkgreen {
     color: darkgreen;
@@ -52,7 +55,9 @@
 .darkgreen-background {
     background-color: darkgreen;
 }
-
+.hidden{
+    display:none;
+}
 .text-size-24px {
     font-size: 24px;
 }

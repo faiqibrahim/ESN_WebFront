@@ -99,7 +99,8 @@
                 </div>
 
                 <h1 class="">{{profile.user.firstname+" "+profile.user.lastname}}</h1>
-
+                <a class="btn btn-sm btn-primary" ng-click="connectUser()" ng-hide="selfProfile || connectedUser">Connect</a>
+                <a class="btn btn-sm btn-danger" ng-click="disconnectUser()" ng-show="!selfProfile && connectedUser">Disconnect</a>
                 <div ng-hide="profile.editTagLine" >
                     <span class="profile-tagline timesnewroman">{{profile.user.tagline}}</span>
                     <a class="btn pull-left" ng-click="_editTagLine()" ng-show="selfProfile">

@@ -1,0 +1,39 @@
+<style>
+    .user-info {
+        position: relative;
+        overflow: auto;
+        text-align: center;
+        padding: 10px;
+    }
+
+    .user-info > img {
+        position: relative;
+        float: left;
+        width: 50px;
+    }
+
+    .user-info > h2 {
+        position: relative;
+        float: left;
+        margin-left: 5px;
+        font-size: 16px;
+        font-weight: bold;
+    }
+</style>
+<div ng-controller="GroupUsersController" ng-show="groupOwner || groupJoined">
+    <div class="row">
+        <div ng-repeat="user in users">
+            <div class=" col-md-3  user-post">
+                <div class="user-info">
+
+                        <img class="img-circle" ng-src="{{user.User.profilephoto_thumb}}"/>
+
+                        <h2 class="timesnewroman"><a ng-href="#/profile/{{user.User.username}}">{{user.User.firstname+' '+user.User.lastname}}</a></h2>
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
