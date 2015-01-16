@@ -49,16 +49,31 @@
                               ng-model="new_post"></textarea>
                 </div>
                 <div class="form-group">
-                    <a class="btn btn-success" ng-click="addPost()">Add</a>
+                    <div class="file-upload">
+                        <label>
+                            <span class="glyphicon glyphicon-file clickable form-control" aria-hidden="true"></span>
+
+                            <input class="hidden" type="file" file-model="postFile" multiple/>
+                        </label>
+                        <label>{{fileStatus}}</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-success" ng-disabled="!new_post" ng-click="addPost()">Add</button>
                 </div>
 
             </div>
-            <div class="row user-posts">
+            <div class="row user-posts" ng-hide="inProcess">
                 <div class=" col-md-5 col-md-offset-1 panel user-post" ng-repeat="post in data.posts">
-                    <div class="user-info">
+                    <div class="user-info padding-10">
                         <img class="img-circle" ng-src="{{post.User.profilephoto_thumb}}"/>
 
-                        <h2 class="timesnewroman">{{post.User.firstname+' '+post.User.lastname}}</h2>
+                        <h2 class="timesnewroman">
+                            <a ng-href="#/profile/{{post.User.username}}">{{post.User.firstname +' '+
+                                post.User.lastname}}</a>
+                            <br/>
+                            <span class="small">{{post.Post.modified}}</span>
+                        </h2>
                         <a class="btn"
                            ng-click="deletePost(post.Post.id,$index)"
                            ng-show="selfPost(post.User.id)">
@@ -70,25 +85,55 @@
                             <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                         </a>
                         <a class="btn"
-                           ng-click="savePost(post.Post)"
+                           ng-click="savePost(post.Post,$index)"
                            ng-show="selfPost(post.User.id) && isEditable(post.Post.id)">
                             <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
                         </a>
                     </div>
                     <div class="content-space timesnewroman" ng-hide="isEditable(post.Post.id)">
-                        {{post.Post.post}}
+                        <a class="btn btn-sm btn-primary" ng-show="post.Group.id" ng-href="#/group/{{post.Group.id}}">Group Post</a>
+                            <a ng-show="post.Content.id" ng-href="{{post.Content.content}}">Download Attachment</a>
+                            <br/>
+                            <span class="lead font-size-16 padding-10">{{post.Post.post}}</span>
 
                     </div>
-                    <textarea class="form-control" ng-show="isEditable(post.Post.id)"
-                              ng-model="post.Post.post"></textarea>
+                    <div ng-show="isEditable(post.Post.id)" ng-controller="HomeEditPostController">
+                        <label>
+                            Remove Attached Files ?
+                            <input type="checkbox" ng-model="editPost.removeFile"/>
+                        </label>
+
+                        <div class="form-group" ng-show="!editPost.removeFile">
+                            <div class="file-upload">
+                                <label>
+                                    <span class="glyphicon glyphicon-file clickable form-control"
+                                          aria-hidden="true"></span>
+
+                                    <input class="hidden" type="file" file-model="postFile" multiple/>
+                                </label>
+                                <label>{{fileStatus}}</label>
+                            </div>
+                        </div>
+
+                        <textarea class="form-control" ng-model="post.Post.post"></textarea>
+
+                    </div>
 
                 </div>
+            </div>
+            <div class="sk-spinner sk-spinner-wave" ng-show="inProcess">
+                <div class="sk-rect1"></div>
+                <div class="sk-rect2"></div>
+                <div class="sk-rect3"></div>
+                <div class="sk-rect4"></div>
+                <div class="sk-rect5"></div>
             </div>
         </div>
 
 
         <div class="col-md-2"></div>
     </div>
+
 
 
 </div>

@@ -8,9 +8,10 @@ angular.module('navbar', [])
                 var $items = [
                     {'title': 'Home', 'position': 'pull-left', 'link': 'home', 'index': 0},
                     {'title': 'Profile', 'position': 'pull-left', 'link': 'profile', 'index': 1},
-                    {'title': 'Connections', 'position': 'pull-left', 'link': 'connections', 'index': 2},
-                    {'title': 'Create Group', 'position': 'pull-left', 'link': 'create-group', 'index': 3},
-                    {'title': 'Logout', 'position': 'pull-right', 'link': 'logout', 'index': 4}
+                    {'title': 'Inbox', 'position': 'pull-left', 'link': 'inbox', 'index': 2},
+                    {'title': 'Connections', 'position': 'pull-left', 'link': 'connections', 'index': 3},
+                    {'title': 'Create Group', 'position': 'pull-left', 'link': 'create-group', 'index': 4},
+                    {'title': 'Logout', 'position': 'pull-right', 'link': 'logout', 'index': 5}
 
                 ];
 
@@ -31,7 +32,7 @@ angular.module('navbar', [])
                     }
                     $location.path('/' + $path);
                 };
-                $scope.isAuthenticated=function(){
+                $scope.isAuthenticated = function () {
                     return $Auth.isAuthenticated();
                 };
                 $scope.getActiveClass = function ($option) {

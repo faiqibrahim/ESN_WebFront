@@ -61,16 +61,15 @@
                 </p>
                 <a ng-click="viewAnswers(question.id)" ng-hide="viewAnswers[question.id]">View Answers</a>
                 <a ng-click="hideAnswers(question.id)" ng-show="viewAnswers[question.id]">Hide Answers</a>
-
+                <span>{{question.created}}</span>
                 <div ng-show="viewAnswers[question.id]">
                     <div class="answer" ng-repeat="answer in answers[question.id]">
                         {{answer.Answer.answer}}
                     </div>
-                    <div class="form-inline form-group" ng-show="groupOwner">
+                    <div class="form-group" ng-show="groupOwner">
 
-                        <input class="form-control" type="text" ng-model="new_answer"/>
-                        <a class="btn btn-sm form-control" ng-click="addAnswer(question.id,new_answer)"><span
-                                class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>
+                        <textarea class="form-control" ng-model="new_answer"></textarea>
+                        <a class="btn btn-success btn-sm " ng-click="addAnswer(question.id,new_answer)">Answer</a>
                     </div>
                 </div>
 

@@ -12,6 +12,9 @@ angular.module('esn').config(function ($routeProvider, $locationProvider) {
     $routeProvider.when('/profile/:userID', {templateUrl: './views/profile.html'});
 
     $routeProvider.when('/create-group', {templateUrl: './views/group-create.html'});
+    $routeProvider.when('/inbox', {templateUrl: './views/inbox.html'});
+    $routeProvider.when('/inbox/:contactId', {templateUrl: './views/inbox/chatbox.html'});
+
     $routeProvider.when('/group/:groupId', {templateUrl: './views/group.html'});
 
 

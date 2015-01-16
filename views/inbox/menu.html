@@ -1,0 +1,36 @@
+<style>
+    .group-menu {
+        overflow: auto;
+        background-color: #f5f5f5;
+        border-radius: 5px;
+        padding-top:5px;
+    }
+
+    .group-menu > ul {
+        text-align: center;
+        position: relative;
+        padding: 0px;
+    }
+
+    .group-menu > ul > li {
+        display: inline;
+        padding: 1px;
+        margin-left: 30px;
+        margin-right: 30px;
+    }
+
+    .group-menu > ul > li > a {
+        color:green;
+
+    }
+</style>
+<div class="group-menu my-font darkgreen">
+    <ul>
+        <li ng-repeat="menu in data.menus">
+            <a class="btn" ng-class="getActiveClass(menu)" ng-click="selectMenu($index)">
+                {{menu}}
+            </a>
+        </li>
+
+    </ul>
+</div>

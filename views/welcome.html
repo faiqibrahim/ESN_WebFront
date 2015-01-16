@@ -1,11 +1,10 @@
-
 <div class="cover-content">
     <div class="row container-fluid">
         <div class="col-lg-5 cover-forms">
             <div class="login-form" ng-controller="loginCtrl">
                 <h2 class="color-black">Login</h2>
 
-                <form class="form-inline" role="form" name="loginForm" novalidate>
+                <form class="form-inline" role="form" name="loginForm" novalidate ng-hide="loginLoading">
                     <input class="form-control" name="username" type="text" placeholder="Username" id="username"
                            ng-model="data.login.username" required>
                     <input type="password" name="password" class="form-control" id="password" placeholder="Password"
@@ -14,12 +13,22 @@
                     <a ng-disabled="loginForm.$invalid" ng-click="login()" class="btn btn-sm btn-primary">Sign in</a>
 
                 </form>
+                <div class="sk-spinner sk-spinner-wave" ng-show="loginLoading">
+                    <div class="sk-rect1"></div>
+                    <div class="sk-rect2"></div>
+                    <div class="sk-rect3"></div>
+                    <div class="sk-rect4"></div>
+                    <div class="sk-rect5"></div>
+                </div>
                 <div class="alert alert-warning" ng-show="data.login.error" role="alert">{{data.login.error}}</div>
             </div>
             <div class="register-form color-black" ng-controller="registrationCtrl">
                 <h2>or Register</h2>
-
-                <form class="form-horizontal" role="form" name="registrationForm" novalidate>
+                <div class="alert alert-success" ng-show="data.register_success" ng-show="data.register_success"
+                     role="alert">
+                    {{data.register_success}}
+                </div>
+                <form class="form-horizontal" role="form" name="registrationForm" ng-hide="inProcess" novalidate>
                     <div class="form-group">
                         <label for="first_name" class="col-sm-2 control-label">First Name</label>
 
@@ -91,10 +100,14 @@
                     </div>
                     <div class="alert alert-danger" ng-show="data.error" role="alert">{{data.error}}</div>
                 </form>
-                <div class="alert alert-success" ng-show="data.register_success" ng-show="data.register_success"
-                     role="alert">
-                    {{data.register_success}}
+                <div class="sk-spinner sk-spinner-wave" ng-show="inProcess">
+                    <div class="sk-rect1"></div>
+                    <div class="sk-rect2"></div>
+                    <div class="sk-rect3"></div>
+                    <div class="sk-rect4"></div>
+                    <div class="sk-rect5"></div>
                 </div>
+
             </div>
         </div>
         <div class="col-lg-3">

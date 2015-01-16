@@ -1,0 +1,142 @@
+<style>
+    .personal-information {
+        padding: 10px;
+        margin: 20px;
+    }
+
+    .about-info {
+        padding-left: 10px;
+
+    }
+</style>
+
+<div ng-controller="infoCtrl">
+    <div class="personal-information panel box-shadow" ng-hide="data.info.edit">
+        <h2 class="center-content myfont">Personal Information</h2>
+        <a class="btn pull-right" ng-click="editInfo()" ng-show="selfProfile">
+            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+        </a>
+
+        <div class="about-info">
+            <span class="my-font bold">Name:</span><span>{{profile.user.firstname +" "+ profile.user.lastname}}</span>
+        </div>
+
+        <div class="about-info">
+            <span class="my-font bold">Contact:</span><span>{{profile.user.contact}}</span>
+        </div>
+
+        <div class="about-info">
+            <span class="my-font bold">Email:</span><span>{{profile.user.email}}</span>
+        </div>
+
+        <div class="about-info">
+            <span class="my-font bold">Address:</span><span>{{profile.user.address}}</span>
+        </div>
+        <div class="about-info">
+            <span class="my-font bold">City:</span><span>{{profile.user.city}}</span>
+        </div>
+        <div class="about-info">
+            <span class="my-font bold">Country:</span><span>{{profile.user.country}}</span>
+        </div>
+
+    </div>
+
+    <form class="form-horizontal box-shadow personal-information" ng-show="data.info.edit" role="form">
+        <div class="form-group">
+            <a class="btn btn-success btn-sm col-sm-1 col-sm-offset-10" ng-click="editInfo()">
+                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+            </a>
+        </div>
+
+        <div class="form-group">
+            <label for="firstname" class="col-sm-2 control-label">First Name</label>
+
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="firstname" placeholder="First Name"
+                       ng-model="profile.user.firstname"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="lastname" class="col-sm-2 control-label">Last Name</label>
+
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="lastname" placeholder="Last Name"
+                       ng-model="profile.user.lastname"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="contact" class="col-sm-2 control-label">Contact</label>
+
+            <div class="col-sm-10">
+                <input type="text" size="4" class="form-control" id="contact" placeholder="Contact"
+                       ng-model="profile.user.contact"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="address" class="col-sm-2 control-label">Address</label>
+
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="address" placeholder="Address"
+                       ng-model="profile.user.address"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="city" class="col-sm-2 control-label">City</label>
+
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="city" placeholder="City" ng-model="profile.user.city"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="country" class="col-sm-2 control-label">Country</label>
+
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="country" placeholder="Country"
+                       ng-model="profile.user.country"/>
+            </div>
+        </div>
+    </form>
+
+    <div>
+        <div class="personal-information panel box-shadow">
+            <h2 class="center-content myfont">Education</h2>
+
+            <div class="about-info" ng-repeat="education in data.educations">
+                <span class="my-font bold">Institute:</span><span>{{education.institute}}</span>
+                <span class="my-font bold">Major:</span><span>{{education.major}}</span>
+                <a class="btn"
+                   ng-click="deleteEducation(education.id,$index)"
+                   ng-show="selfProfile">
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                </a>
+            </div>
+            <form class="form-inline padding-10" ng-hide="addingEducation || !selfProfile">
+                <div class="form-group">
+                    <label class="sr-only" for="institute">Institute</label>
+                    <input type="text" class="form-control" id="institute" ng-model="institute"
+                           placeholder="Institute:"/>
+                </div>
+                <div class="form-group">
+                    <label class="sr-only" for="major">Institute</label>
+                    <input type="text" class="form-control" id="major" ng-model="major" placeholder="Major:"/>
+                </div>
+                <div class="form-group">
+                    <a class="btn" ng-click="addEducation()">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                    </a>
+                </div>
+            </form>
+            <div class="sk-spinner sk-spinner-wave" ng-show="addingEducation">
+                <div class="sk-rect1"></div>
+                <div class="sk-rect2"></div>
+                <div class="sk-rect3"></div>
+                <div class="sk-rect4"></div>
+                <div class="sk-rect5"></div>
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>

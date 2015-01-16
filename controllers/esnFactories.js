@@ -14,7 +14,7 @@ angular.module('Auth', [])
                 $user.User = {};
                 $user.User.username = $username;
                 $user.User.password = $password;
-                $http.post(loginUrl, $user, {withCredentials: true})
+                return $http.post(loginUrl, $user, {withCredentials: true})
                     .success(function (data) {
                         if (data.result.success) {
 
@@ -56,6 +56,7 @@ angular.module('Auth', [])
             logout: function () {
                 localStorageService.clearAll();
                 isLoggedIn = false;
+                $http.get('http://esnback.com/users/logout.json', {withCredentials: true});
             }
 
         };
@@ -95,7 +96,7 @@ angular.module('Auth', [])
     }]).service('$postHandler', function ($http, $Auth) {
         var $addUrl = 'http://esnback.com/posts/add.json';
         return {
-            uploadPost: function ($post,$_scope) {
+            uploadPost: function ($post, $_scope) {
                 var $_post = {
                     Post: $post
                 };
@@ -114,5 +115,11 @@ angular.module('Auth', [])
                     });
             }
         }
+    }).directive('myRepeatDirective', function() {
+        return function(scope, element, attrs) {
+            if (scope.$last){
+                //scope.gotoBottom();
+            }
+        };
     })
 ;

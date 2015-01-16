@@ -13,8 +13,9 @@
 
     <!-- Custom styles for this template -->
     <link href="css/cover.css" rel="stylesheet"/>
-
     <link href="css/custom.css" rel="stylesheet"/>
+    <link href="components/ng-scrollbar/ng-scrollbar.min.css" rel="stylesheet"/>
+
 
     <!-- jQuery and Bootstrap JS -->
     <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
@@ -32,20 +33,20 @@
     <script type="text/javascript" src="components/fileupload/fileupload.js"></script>
     <script type="text/javascript" src="controllers/esnFactories.js"></script>
     <script type="text/javascript" src="js/angucomplete-alt.js"></script>
-    <script type="text/javascript" src="components/postadder/postadder.js"></script>
+    <script type="text/javascript" src="components/ng-scrollbar/ng-scrollbar.min.js"></script>
 
 
     <!--Starting Angularjs App  -->
     <script>
-        var esn = angular.module('esn', ['LocalStorageModule','ngCookies', 'ngRoute', 'navbar', 'fileupload', 'Auth', 'angucomplete-alt', 'postAdder']);
+        var esn = angular.module('esn', ['LocalStorageModule', 'ngCookies', 'ngRoute', 'navbar', 'fileupload', 'Auth', 'angucomplete-alt', 'ngScrollbar']);
         esn.config(function (localStorageServiceProvider) {
             localStorageServiceProvider
                     .setPrefix('esn')
                     .setStorageType('sessionStorage');
         });
-        esn.config(['$httpProvider', function($httpProvider) {
+        esn.config(['$httpProvider', function ($httpProvider) {
             $httpProvider.defaults.useXDomain = true;
-            $httpProvider.defaults.withCredentials=true;
+            $httpProvider.defaults.withCredentials = true;
         }
         ]);
 
@@ -60,9 +61,9 @@
     <script src="controllers/welcomeControllers.js"></script>
     <script src="controllers/homeControllers.js"></script>
     <script src="controllers/profileControllers.js"></script>
+    <script src="controllers/inboxControllers.js"></script>
     <script src="controllers/groupControllers.js"></script>
     <script src="controllers/connectionsControllers.js"></script>
-
 
 
 </head>

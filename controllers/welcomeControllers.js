@@ -5,11 +5,19 @@ angular.module('esn')
     .controller('loginCtrl', function ($scope, $Auth) {
         $scope.data = {};
         $scope.data.login = {};
+        $scope.loginLoading = false;
         $scope.login = function () {
+            $scope.loginLoading = true;
             var $username = $scope.data.login.username;
             var $password = $scope.data.login.password;
             var $path = '/home';
-            $Auth.login($username, $password, $path);
+            var $loginStatus = $Auth.login($username, $password, $path);
+            $loginStatus.success(function (data) {
+                if (!data.result.success) {
+                    $scope.loginLoading = false;
+                    $scope.data.login.error = data.result.message;
+                }
+            });
         }
 
 
@@ -17,7 +25,9 @@ angular.module('esn')
     .controller('registrationCtrl', function ($scope, $http) {
         $scope.data = {};
         $scope.data.result = {};
+        $scope.inProcess = false;
         $scope.register = function () {
+            $scope.inProcess=true;
             var registrationUrl = "http://esnback.com/users/add.json";
             var user = {};
             user.firstname = $scope.data.first_name;
@@ -30,14 +40,16 @@ angular.module('esn')
                 if (data.result.success) {
                     $scope.data.error = null;
                     $scope.data.register_success = 'Registration Successful, Please Login';
-
+                    $scope.inProcess=false;
                 }
                 else {
                     $scope.data.error = data.result.message;
                     $scope.data.register_success = null;
+                    $scope.inProcess=false;
                 }
             }).error(function (error) {
                 console.log(error);
+                $scope.inProcess=false;
             });
 
 

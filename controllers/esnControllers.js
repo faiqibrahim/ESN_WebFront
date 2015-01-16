@@ -15,27 +15,32 @@ angular.module('esn').controller('mainCtrl', function ($scope, $http, localStora
 
 })
     .filter('custom', function () {
-        return function (data, limit) {
-            var result = [];
-            for (var i = 0; i < limit; i++) {
-                result.push(data[i]);
+        return function (data) {
+            for (var i = 1; i < data.length; i++) {
+                for (var k = i; k > 0 && data[k]['created'] < data[k - 1]['created']; k--) {
+                    var temp = data[k];
+                    data[k] = data[k - 1];
+                    data[k - 1] = temp;
+                }
+
             }
-            return result;
+            return data;
 
         };
 
 
     })
-    .filter('wall_posts', function () {
+    .filter('sort-id', function () {
         return function (data) {
-            var wallposts = [];
-            for (var i = 0; i < data.length; i++) {
-                if (data[i].groupid == "" && data[i].type == 'wall') {
-                    wallposts.push(data[i]);
-
+            for (var i = 1; i < data.length; i++) {
+                for (var k = i; k > 0 && data[k]['id'] < data[k - 1]['id']; k--) {
+                    var temp = data[k];
+                    data[k] = data[k - 1];
+                    data[k - 1] = temp;
                 }
+
             }
-            return wallposts;
+            return data;
 
         };
 

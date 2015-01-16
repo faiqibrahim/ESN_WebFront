@@ -1,0 +1,50 @@
+<style>
+    .message-text > a {
+        color: black;
+    }
+
+    .message-text > a:hover, .message-text:hover {
+        color: blue;
+        text-decoration: none;
+    }
+</style>
+<div ng-controller="InboxSummaryController">
+    <div class="sk-spinner sk-spinner-wave" ng-show="loadingSummary">
+        <div class="sk-rect1"></div>
+        <div class="sk-rect2"></div>
+        <div class="sk-rect3"></div>
+        <div class="sk-rect4"></div>
+        <div class="sk-rect5"></div>
+    </div>
+    <div ng-hide="loadingSummary" class="margin-5px my-font">
+        <div class="row">
+            <div ng-repeat="detail in messagesSummary" class="col-md-12">
+                <div class="col-md-4 row">
+                    <div class="col-md-4">
+                        <img class="img-responsive img-rounded" ng-src="{{detail.Contact.profilephoto_thumb}}"/>
+                    </div>
+                    <div class="col-md-8 border_right_grey">
+                        <h2 class="timesnewroman font-size-16">
+                            <a ng-href="#/profile/{{detail.Contact.username}}">{{detail.Contact.firstname +' '+
+                                detail.Contact.lastname}}</a>
+                        </h2>
+                    </div>
+                </div>
+                <div class="col-md-6 padding-top-20px timesnewroman no-decoration message-text">
+                    <a class="clickable" ng-href="#/inbox/{{detail.Contact.username}}">
+                        <p>{{detail.Message.message}}</p>
+                        <span class="small pull-left">{{detail.Message.created}}</span>
+                    </a>
+                </div>
+                <div class="col-md-2">
+                    <a class="btn"
+                       ng-click="deleteChat()">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>

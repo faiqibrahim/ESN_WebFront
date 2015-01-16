@@ -73,57 +73,69 @@
 
     </div>
     <div class="col-lg-8 panel" ng-controller="profileCtrl">
-        <div class="profile-header">
-            <div class="profile-cover">
-                <img ng-src="{{profile.user.coverphoto_thumb}}" class="img-responsive img-rounded"/>
+        <div ng-hide="userInfoLoading">
+            <div class="profile-header">
+                <div class="profile-cover">
+                    <img ng-src="{{profile.user.coverphoto_thumb}}" class="img-responsive img-rounded"/>
 
-                <div class="cover-photo-upload" ng-show="selfProfile">
-                    <label for="cover-input">
-                        <span class="glyphicon glyphicon-camera clickable form-control" aria-hidden="true"></span>
-                    </label>
+                    <div class="cover-photo-upload" ng-show="selfProfile">
+                        <label for="cover-input">
+                            <span class="glyphicon glyphicon-camera clickable form-control" aria-hidden="true"></span>
+                        </label>
 
-                    <input id="cover-input" type="file" file-model="coverFile" multiple
-                           ng-click="uploadFileType('cover')"/>
+                        <input id="cover-input" type="file" file-model="coverFile" multiple
+                               ng-click="uploadFileType('cover')"/>
+                    </div>
                 </div>
-            </div>
-            <div class="profile-data">
-                <img ng-src="{{profile.user.profilephoto_thumb}}" class="img-responsive img-circle"/>
+                <div class="profile-data">
+                    <img ng-src="{{profile.user.profilephoto_thumb}}" class="img-responsive img-circle"/>
 
-                <div class="profile-photo-upload" ng-show="selfProfile">
-                    <label for="file-input">
-                        <span class="glyphicon glyphicon-camera clickable form-control" aria-hidden="true"></span>
-                    </label>
+                    <div class="profile-photo-upload" ng-show="selfProfile">
+                        <label for="file-input">
+                            <span class="glyphicon glyphicon-camera clickable form-control" aria-hidden="true"></span>
+                        </label>
 
-                    <input id="file-input" type="file" file-model="profileFile" multiple
-                           ng-click="uploadFileType('profile')"/>
-                </div>
+                        <input id="file-input" type="file" file-model="profileFile" multiple
+                               ng-click="uploadFileType('profile')"/>
+                    </div>
 
-                <h1 class="">{{profile.user.firstname+" "+profile.user.lastname}}</h1>
-                <a class="btn btn-sm btn-primary" ng-click="connectUser()" ng-hide="selfProfile || connectedUser">Connect</a>
-                <a class="btn btn-sm btn-danger" ng-click="disconnectUser()" ng-show="!selfProfile && connectedUser">Disconnect</a>
-                <div ng-hide="profile.editTagLine" >
-                    <span class="profile-tagline timesnewroman">{{profile.user.tagline}}</span>
-                    <a class="btn pull-left" ng-click="_editTagLine()" ng-show="selfProfile">
-                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-                    </a>
+                    <h1 class="">{{profile.user.firstname+" "+profile.user.lastname}}</h1>
+                    <a class="btn btn-sm btn-primary" ng-click="connectUser()" ng-hide="selfProfile || connectedUser">Connect</a>
+                    <a class="btn btn-sm btn-danger" ng-click="disconnectUser()"
+                       ng-show="!selfProfile && connectedUser">Disconnect</a>
+
+                    <div ng-hide="profile.editTagLine">
+                        <span class="profile-tagline timesnewroman">{{profile.user.tagline}}</span>
+                        <a class="btn pull-left" ng-click="_editTagLine()" ng-show="selfProfile">
+                            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                        </a>
+                    </div>
+                    <div ng-show="profile.editTagLine">
+                        <input class="form-control" ng-model="profile.user.tagline"/>
+                        <a class="btn pull-left" ng-click="_editTagLine()">
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        </a>
+                    </div>
                 </div>
-                <div ng-show="profile.editTagLine">
-                    <input class="form-control" ng-model="profile.user.tagline"/>
-                    <a class="btn pull-left" ng-click="_editTagLine()">
-                        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div>
-            <div ng-controller="profileMenuCtrl">
-                <ng-include src="'./views/profilemenu.html'"></ng-include>
             </div>
             <div>
+                <div ng-controller="profileMenuCtrl">
+                    <ng-include src="'./views/profile/profilemenu.html'"></ng-include>
+                </div>
+                <div>
 
-                <div ng-include="data.view"></div>
+                    <div ng-include="data.view"></div>
+                </div>
             </div>
         </div>
+        <div class="sk-spinner sk-spinner-wave" ng-show="userInfoLoading">
+            <div class="sk-rect1"></div>
+            <div class="sk-rect2"></div>
+            <div class="sk-rect3"></div>
+            <div class="sk-rect4"></div>
+            <div class="sk-rect5"></div>
+        </div>
+
     </div>
     <div class="col-lg-2">
 

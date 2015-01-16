@@ -1,0 +1,75 @@
+<style>
+    .header {
+        overflow: hidden;
+        background-color: #f5f5f5;
+        border-radius: 5px;
+        padding-top: 5px;
+    }
+
+    .scroll {
+        overflow: auto;
+    }
+
+    .test {
+        height: 400px;
+        max-height: 400px;
+    }
+</style>
+<div ng-controller="ChatBoxController">
+
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <h2 class="header my-font center-text padding-10 darkgreen">{{contact.firstname+" "+contact.lastname}}</h2>
+
+            <div class="test scroll" ng-scrollbar rebuild-on="rebuild:scrollbar" bottom>
+                <div class="center center-text"><a ng-click="loadPrevious()" class="clickable">Load Previous
+                    Messages</a></div>
+                <div ng-repeat="chat in chat.Message|custom" class="col-md-12 panel">
+
+                    <div class="col-md-3 row padding-top-10px">
+                        <div class="col-md-4 margin-0">
+                            <img class="img-responsive img-rounded"
+                                 ng-src="{{getUser(chat.user_id).profilephoto_thumb}}"/>
+                        </div>
+                        <div class="col-md-8 margin-0">
+                            <h2 class="timesnewroman font-size-12">
+                                <a ng-href="#/profile/{{getUser(chat.user_id).username}}">
+                                    {{getUser(chat.user_id).firstname +' '+ getUser(chat.user_id).lastname}}
+                                </a>
+                            </h2>
+                        </div>
+                    </div>
+                    <div class="col-md-7 padding-top-20px timesnewroman no-decoration message-text">
+                        <p class="font-size-16">{{chat.message}}</p>
+                        <span class="small pull-left color-lightgrey">{{chat.created}}</span>
+
+                    </div>
+                    <div class="col-md-2">
+                        <a class="btn"
+                           ng-click="deleteMessage(chat.id,$index)">
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="form-horizontal">
+                <div class="col-md-offset-2 col-md-6">
+                    <div class="form-group">
+                        <textarea class="form-control" ng-model="new_message"></textarea>
+                    </div>
+                </div>
+                <div class=" col-md-1 padding-top-10px">
+                    <div class="form-group">
+                        <a class="form-control btn btn-primary" ng-click="sendMessage()">Send</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2"></div>
+
+
+    </div>
+</div>

@@ -179,7 +179,8 @@ angular.module('esn')
 
                         var $announcement = data.result.announcement;
                         $scope.data.announcements.push($announcement.Announcement);
-                        console.log($announcement.Announcement);
+                    }else{
+                        console.log(data);
                     }
                 }).error(function (error) {
                     console.log(error);
@@ -190,6 +191,8 @@ angular.module('esn')
                 .success(function (data) {
                     if (data.result.success) {
                         $scope.data.announcements.splice($index, 1);
+                    }else{
+                        console.log(data);
                     }
                 }).error(function (error) {
                     console.log(error);
@@ -408,7 +411,7 @@ angular.module('esn')
         };
 
 
-        $http.get('http://esnback.com/groupcontents/getbygroup/' + $scope.Group.groupData.id + '.json', {withCredentials: true})
+        $http.get('http://esnback.com/groupcontents/getByGroup/' + $scope.Group.groupData.id + '.json', {withCredentials: true})
             .success(function (data) {
                 if (data.result.success) {
                     $scope.contents = data.result.group_contents;

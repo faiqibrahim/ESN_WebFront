@@ -1,0 +1,21 @@
+<div class="row container-fluid">
+    <div class="col-lg-2">
+
+    </div>
+    <div class="col-lg-8 panel" ng-controller="InboxController">
+        <h1 class="my-font center-text darkgreen">Messages</h1>
+
+        <div>
+            <div ng-controller="InboxMenuController">
+                <ng-include src="'./views/connections/menu.html'"></ng-include>
+            </div>
+            <div>
+
+                <div ng-include="data.view"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-2">
+
+    </div>
+</div>
