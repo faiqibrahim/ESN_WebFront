@@ -18,29 +18,31 @@
     </div>
     <div ng-hide="loadingSummary" class="margin-5px my-font">
         <div class="row">
-            <div ng-repeat="detail in messagesSummary" class="col-md-12">
+            <div ng-repeat="detail in messagesSummary|sortByDate" class="col-md-12">
                 <div class="col-md-4 row">
                     <div class="col-md-4">
                         <img class="img-responsive img-rounded" ng-src="{{detail.Contact.profilephoto_thumb}}"/>
                     </div>
                     <div class="col-md-8 border_right_grey">
                         <h2 class="timesnewroman font-size-16">
-                            <a ng-href="#/profile/{{detail.Contact.username}}">{{detail.Contact.firstname +' '+
-                                detail.Contact.lastname}}</a>
+                            <a ng-href="#/profile/{{detail.Contact.username}}">
+                                {{detail.Contact.firstname +' '+detail.Contact.lastname}}
+                            </a>
                         </h2>
                     </div>
                 </div>
                 <div class="col-md-6 padding-top-20px timesnewroman no-decoration message-text">
                     <a class="clickable" ng-href="#/inbox/{{detail.Contact.username}}">
-                        <p>{{detail.Message.message}}</p>
-                        <span class="small pull-left">{{detail.Message.created}}</span>
+                        <div ng-show="detail.Message.message">
+                            <p>{{detail.Message.message}}</p>
+                            <span class="small pull-left">{{detail.Message.created}}</span>
+                        </div>
+                        <div ng-hide="detail.Message.message">
+                            <p>No Messages</p>
+                        </div>
                     </a>
                 </div>
                 <div class="col-md-2">
-                    <a class="btn"
-                       ng-click="deleteChat()">
-                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                    </a>
                 </div>
 
             </div>

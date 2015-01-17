@@ -4,9 +4,10 @@
     }
 
     .announcement h2 {
-        position:relative;
+        position: relative;
         float: left;
     }
+
     .content-space {
         clear: left;
         font-weight: normal;
@@ -34,11 +35,11 @@
                             <label>
                                 Description
                             </label>
-                            <textarea class="form-control" id="sharebox_text" placeholder="Share Something..."
+                            <textarea class="form-control" id="sharebox_text" placeholder="..."
                                       ng-model="new_description"></textarea>
                         </div>
                         <div class="form-group">
-                            <a class="btn btn-success" ng-click="addAnnouncement()">Add</a>
+                            <a class="btn btn-success" ng-disabled="!new_title || !new_description" ng-click="addAnnouncement()">Add</a>
                         </div>
 
                     </div>
@@ -48,18 +49,27 @@
                 </div>
             </div>
 
+            <div ng-hide="loadingAnnouncements">
+                <div class="panel padding-10 margin-5px my-font box-shadow-red announcement"
+                     dir-paginate="announcement in data.announcements | itemsPerPage: 5">
+                    <h2 class="darkgreen "><span class="">{{announcement.Announcement.title}}</span></h2>
+                    <a class="btn"
+                       ng-click="deleteAnnouncement(announcement.Announcement.id,$index)"
+                       ng-show="groupOwner">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                    </a>
 
-            <div class="panel padding-10 margin-5px my-font box-shadow-red announcement"
-                 ng-repeat="announcement in data.announcements|reverse">
-                <h2 class="darkgreen "><span class="">{{announcement.title}}</span></h2>
-                <a class="btn"
-                   ng-click="deleteAnnouncement(announcement.id,$index)"
-                     ng-show="groupOwner"   >
-                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                </a>
-
-                <p class="lead timesnewroman font-size-12 content-space">{{announcement.announcement}}</p>
-                <span class="small">{{announcement.modified}}</span>
+                    <p class="lead timesnewroman font-size-16 content-space">{{announcement.Announcement.announcement}}</p>
+                    <span class="small">{{announcement.Announcement.modified}}</span>
+                </div>
+                <dir-pagination-controls></dir-pagination-controls>
+            </div>
+            <div class="sk-spinner sk-spinner-wave" ng-show="loadingAnnouncements">
+                <div class="sk-rect1"></div>
+                <div class="sk-rect2"></div>
+                <div class="sk-rect3"></div>
+                <div class="sk-rect4"></div>
+                <div class="sk-rect5"></div>
             </div>
         </div>
         <div class="col-lg-1">

@@ -10,6 +10,7 @@
     }
 </style>
 <div ng-controller="GroupTasksController" ng-show="groupOwner || groupJoined">
+    <div class="my-font center center-text darkgreen font-size-16">Server Time: <b>{{server_time.date}}</b></div>
     <div class="well center margin-5px" ng-show="groupOwner">
         <div class="my-font darkgreen center-text center">Create Task</div>
         <div class="form-group">
@@ -42,57 +43,75 @@
             </div>
         </div>
         <div class="form-group">
-            <a class="btn btn-success" ng-click="createTask()">Create</a>
+            <a class="btn btn-success" ng-disabled="!new_title || !new_description || !new_datetime"
+               ng-click="createTask()">Create</a>
         </div>
 
     </div>
     <div class="row margin-5px">
-        <div ng-repeat="task in tasks" class="box-shadow-green margin-5px padding-10">
-            <div>
-                <h1 class="my-font">{{task.Task.title}}</h1><a class="btn btn-success btn-sm" ng-show="groupOwner" ng-click="viewSolutions(task.Task.id)">View Solutions</a>
+        <div ng-hide="loadingTasks">
+            <div dir-paginate="task in tasks|itemsPerPage:5" class="box-shadow-green margin-5px padding-10">
+                <div>
+                    <h1 class="my-font">{{task.Task.title}}</h1><a class="btn btn-success btn-sm" ng-show="groupOwner"
+                                                                   ng-click="viewSolutions(task.Task.id)">View
+                    Solutions</a>
 
                 <span><a ng-href="{{task.Content.content}}" ng-show="task.Content.content">Download Attached
                     File</a></span>
 
-                <div class="my-font">
-                    Deadline:
+                    <div class="my-font">
+                        Deadline:
                     <span class="label label-warning">
                          {{task.Task.enddate}}
                     </span>
-                </div>
-
-                <div class="clear">
-                    <p class="lead timesnewroman font-size-12 content-space">{{task.Task.description}}</p>
-                </div>
-                <span class="small">{{task.Task.modified}}</span>
-            </div>
-
-            <div class="form-group" ng-controller="GroupSolutionsController" ng-show="groupJoined">
-                <span class="hidden">{{solution_id=task.Solution.id}}</span>
-                <a ng-click="resubmitSolution()" ng-show="(!resubmit && task.Solution.id) || solutionUploaded">Solution
-                    Uploaded! Resubmit?</a>
-
-                <div ng-show="(!task.Solution.id || resubmit) && !solutionUploaded">
-                    <div class="form-group">
-                        <label>Solution</label>
-                        <textarea class="form-control" ng-model="new_solution"
-                                  placeholder="Enter details here.."></textarea>
                     </div>
-                    <div class="form-group">
-                        <div class="file-upload">
-                            <label>
-                                <span class="glyphicon glyphicon-file clickable form-control" aria-hidden="true"></span>
 
-                                <input class="hidden" type="file" file-model="solutionFile" multiple/>
-                            </label>
-                            <label>{{fileStatus}}</label>
+                    <div class="clear">
+                        <p class="lead timesnewroman font-size-12 content-space">{{task.Task.description}}</p>
+                    </div>
+                    <span class="small">{{task.Task.modified}}</span>
+                </div>
+
+                <div class="form-group" ng-controller="GroupSolutionsController"
+                     ng-show="groupJoined && (task.Task.enddate>=server_time.date)">
+                    <span class="hidden">{{solution_id=task.Solution.id}}</span>
+                    <a ng-click="resubmitSolution()" ng-show="(!resubmit && task.Solution.id) || solutionUploaded">Solution
+                        Uploaded! Resubmit?</a>
+
+                    <div ng-show="(!task.Solution.id || resubmit) && !solutionUploaded">
+                        <div class="form-group">
+                            <label>Solution</label>
+                            <textarea class="form-control" ng-model="new_solution"
+                                      placeholder="Enter details here.."></textarea>
                         </div>
+                        <div class="form-group">
+                            <div class="file-upload">
+                                <label>
+                                    <span class="glyphicon glyphicon-file clickable form-control"
+                                          aria-hidden="true"></span>
+
+                                    <input class="hidden" type="file" file-model="solutionFile" multiple/>
+                                </label>
+                                <label>{{fileStatus}}</label>
+                            </div>
+                        </div>
+                        <a class="btn btn-primary" ng-click="submitSolution(task.Task.id)">Submit</a>
                     </div>
-                    <a class="btn btn-primary" ng-click="submitSolution(task.Task.id)">Submit</a>
                 </div>
+                <div class="form-group" ng-show="(task.Task.enddate<server_time.date)">
+                    <span class="label label-info">This Task has Expired</span>
+                </div>
+
+
             </div>
-
-
+            <dir-pagination-controls></dir-pagination-controls>
+        </div>
+        <div class="sk-spinner sk-spinner-wave" ng-show="loadingTasks">
+            <div class="sk-rect1"></div>
+            <div class="sk-rect2"></div>
+            <div class="sk-rect3"></div>
+            <div class="sk-rect4"></div>
+            <div class="sk-rect5"></div>
         </div>
     </div>
 

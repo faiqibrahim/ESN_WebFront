@@ -40,8 +40,8 @@
         </div>
 
     </div>
-    <div class="row margin-5px">
-        <div ng-repeat="content in contents" class="box-shadow-green margin-5px padding-10">
+    <div class="row margin-5px" ng-hide="contentLoading">
+        <div dir-paginate="content in contents|itemsPerPage:5" class="box-shadow-green margin-5px padding-10">
             <div>
                 <h1 class="my-font">{{content.Groupcontent.title}}<a class="btn"
                                                                      ng-click="deleteContent(content.Groupcontent.id,$index)"
@@ -57,6 +57,14 @@
 
 
         </div>
+        <dir-pagination-controls></dir-pagination-controls>
+    </div>
+    <div class="sk-spinner sk-spinner-wave" ng-show="contentLoading">
+        <div class="sk-rect1"></div>
+        <div class="sk-rect2"></div>
+        <div class="sk-rect3"></div>
+        <div class="sk-rect4"></div>
+        <div class="sk-rect5"></div>
     </div>
 
 </div>

@@ -50,40 +50,53 @@ angular.module('esn')
                 });
         };
 
-    }).controller('GroupController', function ($scope, $http, $routeParams, $Auth, fileUpload) {
+    }).controller('GroupController', function ($scope, $http, $routeParams, $Auth) {
+
         $scope.groupOwner = false;
         $scope.groupJoined = false;
-
+        $scope.groupLoading = false;
         $scope.owner = {};
         $scope.Group = {};
+        $scope.authInfoLoading = false;
+        $scope.groupRequested = false;
+        $scope.groupLoaded = {};
+        $scope.groupNotJoined = true;
 
-        $scope.get_group = $http.get('http://esnback.com/groups/getById/' + $routeParams.groupId + '.json', {withCredentials: true})
-            .success(function (data) {
-                if (data.result.success) {
-                    console.log(data.result.group);
-                    $scope.Group = data.result.group;
-                    $scope.Group.groupData = data.result.group.Group;
-                    $scope.owner = data.result.group.User;
+        //load Group Data
+        var getAuthInfo = function () {
+            $scope.authInfoLoading = true;
+            return $http.get('http://esnback.com/groups/getUserInfo/' + $routeParams.groupId + '.json', {withCredentials: true})
+                .success(function (data) {
+                    if (data.result.success) {
 
-                    if ($Auth.getUser('id') == $scope.owner.id) {
-                        $scope.groupOwner = true;
-                    }
+                        if (data.result.group_owner) {
+                            $scope.owner = data.result.group_owner;
+                            $scope.groupOwner = true;
+                            $scope.groupNotJoined = false;
 
-                    else {
-                        $scope.groupOwner = false;
-                    }
-                    for (var i = 0; i < $scope.Group.GroupUser.length; i++) {
-                        if ($Auth.getUser('id') == $scope.Group.GroupUser[i].user_id) {
+                        } else if (data.result.group_joined) {
                             $scope.groupJoined = true;
-                            break;
-                        }
-                    }
+                            $scope.groupNotJoined = false;
 
-                    $scope.Group.privacy = data.result.group.Groupprivacy.privacy;
-                }
-            }).error(function (error) {
-                console.log(error);
-            });
+                        } else if (data.result.group_requested) {
+                            $scope.groupRequested = true;
+                        }
+                        $scope.authInfoLoading = false;
+                        $scope.Group = data.result.group;
+                    } else {
+                        console.log(data);
+                    }
+                }).error(function (error) {
+                    console.log(error);
+                });
+        };
+        var _load = function () {
+            $scope.groupLoaded = getAuthInfo();
+
+        };
+        _load();
+
+
         $scope.data = {};
         $scope.data.view = './views/group/announcements.html';
         $scope.updateView = function (view) {
@@ -107,9 +120,12 @@ angular.module('esn')
 
 
         };
+        $scope.joiningGroup = false;
         $scope.joinGroup = function () {
+            $scope.joiningGroup = true;
+
             var $user_id = $Auth.getUser('id');
-            var $group_id = $scope.Group.Group.id;
+            var $group_id = $scope.Group.id;
             var $formData = {
                 user_id: $user_id,
                 group_id: $group_id
@@ -117,29 +133,62 @@ angular.module('esn')
             $http.post('http://esnback.com/groupusers/add.json', $formData, {withCredentials: true})
                 .success(function (data) {
                     if (data.result.success) {
-                        $scope.groupJoined = true;
+
+                        if (data.result.added) {
+                            $scope.groupJoined = true;
+                            _load();
+                        } else if (data.result.requested) {
+                            $scope.groupRequested = true;
+                        }
+                        $scope.joiningGroup = false;
+
                     }
                 }).error(function (error) {
                     console.log(error);
                 });
             console.log($formData);
         };
+        $scope.joiningGroup = false;
+
         $scope.unJoinGroup = function () {
-            var $user_id = $Auth.getUser('id');
-            var $group_id = $scope.Group.Group.id;
-            var $formData = {
-                user_id: $user_id,
-                group_id: $group_id
-            };
+            $scope.joiningGroup = true;
+            var $group_id = $scope.Group.id;
             $http.delete('http://esnback.com/groupusers/delete/' + $group_id + '.json', {withCredentials: true})
                 .success(function (data) {
                     if (data.result.success) {
                         $scope.groupJoined = false;
+                        $scope.joiningGroup = false;
+                        $scope.groupNotJoined = true;
+                        _load();
+
                     }
                     console.log(data);
                 }).error(function (error) {
                     console.log(error);
                 });
+        };
+
+        $scope.joiningGroup = false;
+
+        $scope.cancelRequest = function () {
+            $scope.joiningGroup = true;
+            var $group_id = $scope.Group.id;
+            if ($scope.groupRequested)
+                $http.delete('http://esnback.com/groupusers/deleteRequest/' + $group_id + '.json', {withCredentials: true})
+                    .success(function (data) {
+                        if (data.result.success) {
+                            $scope.groupRequested = false;
+                            $scope.joiningGroup = false;
+
+                        }
+                        console.log(data);
+                    }).error(function (error) {
+                        console.log(error);
+                    });
+        };
+        $scope.seeRequests = function () {
+
+            $scope.data.view = './views/group/requests.html';
         };
     })
     .controller('GroupMenuController', function ($scope) {
@@ -158,19 +207,36 @@ angular.module('esn')
             return menu == $selectedMenu ? 'active' : '';
         }
     }).controller('GroupAnnouncementsController', function ($scope, $http) {
-        $scope.data = {};
-        $scope.get_group.success(function () {
-
-            $scope.data.announcements = $scope.Group.Announcement;
-
-            console.log($scope.Group);
+        $scope.data = {
+            announcements: []
+        };
+        $scope.loadingAnnouncements = false;
+        var updateAnnouncements = function () {
+            $scope.loadingAnnouncements = true;
+            $http.post('http://esnback.com/announcements/getByGroup/' + $scope.Group.id + '.json', {withCredentials: true})
+                .success(function (data) {
+                    if (data.result.success) {
+                        $scope.loadingAnnouncements = false;
+                        $scope.data.announcements = data.result.announcements;
+                    } else {
+                        console.log(data);
+                    }
+                }).error(function (error) {
+                    console.log(error);
+                });
+        };
+        $scope.groupLoaded.then(function () {
+            if ($scope.groupOwner || $scope.groupJoined)
+                updateAnnouncements();
         });
+
+
         $scope.addAnnouncement = function () {
             var $formData = {
                 Announcement: {
                     title: $scope.new_title,
                     announcement: $scope.new_description,
-                    group_id: $scope.Group.Group.id
+                    group_id: $scope.Group.id
                 }
             };
             $http.post('http://esnback.com/announcements/add.json', $formData, {withCredentials: true})
@@ -178,8 +244,10 @@ angular.module('esn')
                     if (data.result.success) {
 
                         var $announcement = data.result.announcement;
-                        $scope.data.announcements.push($announcement.Announcement);
-                    }else{
+                        $scope.data.announcements.unshift($announcement);
+                        $scope.new_title = '';
+                        $scope.new_description = '';
+                    } else {
                         console.log(data);
                     }
                 }).error(function (error) {
@@ -191,7 +259,7 @@ angular.module('esn')
                 .success(function (data) {
                     if (data.result.success) {
                         $scope.data.announcements.splice($index, 1);
-                    }else{
+                    } else {
                         console.log(data);
                     }
                 }).error(function (error) {
@@ -200,93 +268,209 @@ angular.module('esn')
         }
 
 
-    }).controller('GroupPostsController', function ($scope, $http, $Auth, $routeParams) {
-        console.log($scope.test);
+    }).controller('GroupPostsController', function ($scope, $http, fileUpload) {
+
         $scope.data = {
-            posts: []
+            posts: {}
         };
-        $scope.profile = {
-            user: {}
-        };
+        $scope.loadingGroupPosts = false;
         var updatePosts = function () {
-            $http.post('http://esnback.com/posts/findByGroup/' + $scope.Group.groupData.id + '.json', {withCredentials: true})
+            $scope.loadingGroupPosts = true;
+            $http.post('http://esnback.com/posts/findByGroup/' + $scope.Group.id + '.json', {withCredentials: true})
                 .success(function (data) {
                     if (data.result.success) {
+                        $scope.loadingGroupPosts = false;
                         $scope.data.posts = data.result.posts;
-
+                    } else {
+                        console.log(data);
                     }
                 }).error(function (error) {
                     console.log(error);
                 });
         };
-        updatePosts();
+        $scope.groupLoaded.then(function () {
+            if ($scope.groupOwner || $scope.groupJoined)
+                updatePosts();
+
+        });
+        var editable_post_id = -1;
+
+        $scope.editPost = {
+            content_id: null,
+            removeFile: true
+        };
+
+        var resetFileStatus = function () {
+            $scope.$fileStatus = {
+                isUploaded: false,
+                content_id: null,
+                content_path: null
+            };
+            $scope.fileStatus = 'No file';
+            $scope.isUploading = false;
+        };
+
+        resetFileStatus();
+
+
+        $scope.uploadfile = function () {
+            $scope.isUploading = true;
+            $scope.fileStatus = 'Please wait while the file gets uploaded';
+            var file = $scope.postFile;
+            if (editable_post_id != -1) {
+                file = $scope.editFile;
+            }
+            var uploadUrl = 'http://esnback.com/contents/uploadFile.json';
+            var uploadData = fileUpload.uploadFileToUrl(file, uploadUrl);
+            uploadData.then(function (result) {
+                if (result != null && result.success) {
+                    $scope.$fileStatus.isUploaded = true;
+                    $scope.$fileStatus.content_id = result.content_id;
+                    $scope.$fileStatus.content_path = result.content_path;
+                    $scope.fileStatus = 'File Successfully Attached';
+                    //resetFileStatus();
+                } else {
+                    $scope.fileStatus = result.message;
+
+                }
+                $scope.isUploading = false;
+            });
+        };
         $scope.addPost = function () {
             var $formData = {
                 Post: {
                     post: $scope.new_post,
-                    group_id: $scope.Group.Group.id,
-                    privacy_id: 1
+                    privacy_id: 1,
+                    content_id: $scope.$fileStatus.content_id,
+                    group_id: $scope.Group.id
                 }
             };
             $http.post('http://esnback.com/posts/add.json', $formData, {withCredentials: true})
                 .success(function (data) {
                     if (data.result.success) {
-
                         var $post = data.result.post;
-                        $scope.data.posts.push($post);
+                        $scope.data.posts.unshift($post);
                         $scope.new_post = " ";
-                        console.log($post);
+                        resetFileStatus();
+                    }
+                    else {
+                        console.log(data);
                     }
                 }).error(function (error) {
                     console.log(error);
                 });
         };
 
-        var editable_post_id = -1;
 
         $scope.isEditable = function ($post_id) {
             return $post_id == editable_post_id;
         };
         $scope.setEditable = function ($post_id) {
             editable_post_id = $post_id;
+            resetFileStatus();
         };
-        $scope.savePost = function ($post) {
+
+        $scope.savePost = function ($post, $index) {
+            if ($scope.editPost.removeFile) {
+                $post.content_id = null;
+            } else if (!angular.isUndefined($scope.editPost.content_id) && $scope.editPost.content_id != null) {
+                $post.content_id = $scope.editPost.content_id;
+            }
+
             $http.post('http://esnback.com/posts/edit/' + $post.id + '.json', {'Post': $post}, {withCredentials: true})
                 .success(function (data) {
                     if (data.result.success) {
                         editable_post_id = -1;
+                        $scope.data.posts[$index] = data.result.post;
+                        console.log(data);
+                        resetFileStatus();
+                    } else {
+                        console.log(data);
+                        resetFileStatus();
                     }
                 })
                 .error(function (error) {
                     console.log(error);
+                    resetFileStatus();
                 });
 
         };
+
         $scope.deletePost = function (id, $index) {
             $http.delete('http://esnback.com/posts/delete/' + id + '.json', {withCredentials: true})
                 .success(function (data) {
                     if (data.result.success) {
-                        //$scope.data.posts.splice($index, 1);
-                        updatePosts();
+                        $scope.data.posts.splice($index, 1);
                     }
                 }).error(function (error) {
                     console.log(error);
                 });
         }
 
+    }).
+    controller('GroupEditPostController', function ($scope, $http, fileUpload) {
+        var resetFileStatus = function () {
+            $scope.$fileStatus = {
+                isUploaded: false,
+                content_id: null,
+                content_path: null
+            };
+            $scope.fileStatus = 'No file';
+            $scope.isUploading = false;
+        };
+
+        resetFileStatus();
+
+
+        $scope.uploadfile = function () {
+            $scope.isUploading = true;
+            $scope.fileStatus = 'Please wait while the file gets uploaded';
+            var file = $scope.postFile;
+            var uploadUrl = 'http://esnback.com/contents/uploadFile.json';
+            var uploadData = fileUpload.uploadFileToUrl(file, uploadUrl);
+            uploadData.then(function (result) {
+                if (result != null && result.success) {
+                    $scope.$fileStatus.isUploaded = true;
+                    $scope.$fileStatus.content_id = result.content_id;
+                    $scope.$fileStatus.content_path = result.content_path;
+                    $scope.fileStatus = 'File Successfully Attached';
+                    $scope.editPost.content_id = result.content_id;
+                } else {
+                    $scope.fileStatus = result.message;
+
+                }
+                $scope.isUploading = false;
+            });
+        };
+
     }).controller('GroupQuestionsController', function ($scope, $http) {
-        $scope.data = {};
-        $scope.get_group.success(function () {
-
-            $scope.data.questions = $scope.Group.Question;
-
-            console.log($scope.Group);
+        $scope.data = {
+            questions: []
+        };
+        $scope.loadingQuestions = false;
+        var updateQuestions = function () {
+            $scope.loadingQuestions = true;
+            $http.post('http://esnback.com/questions/getByGroup/' + $scope.Group.id + '.json', {withCredentials: true})
+                .success(function (data) {
+                    if (data.result.success) {
+                        $scope.loadingQuestions = false;
+                        $scope.data.questions = data.result.questions;
+                    } else {
+                        console.log(data);
+                    }
+                }).error(function (error) {
+                    console.log(error);
+                });
+        };
+        $scope.groupLoaded.then(function () {
+            if ($scope.groupOwner || $scope.groupJoined)
+                updateQuestions();
         });
         $scope.addQuestion = function () {
             var $formData = {
                 Question: {
                     question: $scope.new_question,
-                    group_id: $scope.Group.Group.id
+                    group_id: $scope.Group.id
                 }
             };
             $http.post('http://esnback.com/questions/add.json', $formData, {withCredentials: true})
@@ -296,17 +480,6 @@ angular.module('esn')
                         var $question = data.result.question;
                         $scope.data.questions.push($question.Question);
                         console.log($question.Question);
-                    }
-                }).error(function (error) {
-                    console.log(error);
-                });
-        };
-
-        $scope.deleteAnnouncement = function ($announcement_id, $index) {
-            $http.delete('http://esnback.com/announcements/delete/' + $announcement_id + '.json', {withCredentials: true})
-                .success(function (data) {
-                    if (data.result.success) {
-                        $scope.data.announcements.splice($index, 1);
                     }
                 }).error(function (error) {
                     console.log(error);
@@ -352,15 +525,44 @@ angular.module('esn')
 
     }).controller('GroupUsersController', function ($scope, $http) {
         $scope.users = {};
-        $http.get('http://esnback.com/groups/getUsers/' + $scope.Group.groupData.id + '.json', {withCredentials: true})
-            .success(function (data) {
-                if (data.result.success) {
-                    $scope.users = data.result.users;
-                }
-                console.log(data);
-            }).error(function (error) {
-                console.log(error);
-            });
+        $scope.usersLoading = false;
+        var loadUsers = function () {
+            $scope.usersLoading = true;
+            $http.get('http://esnback.com/groups/getUsers/' + $scope.Group.id + '.json', {withCredentials: true})
+                .success(function (data) {
+                    if (data.result.success) {
+                        $scope.users = data.result.users;
+                        $scope.usersLoading = false;
+                    } else
+                        console.log(data);
+                }).error(function (error) {
+                    console.log(error);
+                });
+        };
+        $scope.groupLoaded.then(function () {
+            if ($scope.groupOwner || $scope.groupJoined)
+                loadUsers();
+
+        });
+        $scope.removeProcessing = false;
+        $scope.removeUser = function ($user_id, $index) {
+            $scope.removeProcessing = true;
+
+            $http.delete('http://esnback.com/groups/deleteUser/' + $user_id + '/' + $scope.Group.id + '.json', {withCredentials: true})
+                .success(function (data) {
+                    if (data.result.success) {
+                        $scope.users.splice($index, 1);
+                        $scope.removeProcessing = false;
+                    } else {
+                        console.log(data);
+                        $scope.removeProcessing = false;
+
+                    }
+                }).error(function (error) {
+                    console.log(error);
+                });
+        }
+
     })
     .controller('GroupContentsController', function ($scope, $http, $Auth, fileUpload) {
         $scope.contents = {};
@@ -371,6 +573,26 @@ angular.module('esn')
         };
         $scope.fileStatus = 'No file';
         $scope.isUploading = false;
+        $scope.contentLoading = false;
+        var loadContent = function () {
+            $scope.contentLoading = true;
+            $http.get('http://esnback.com/groupcontents/getByGroup/' + $scope.Group.id + '.json', {withCredentials: true})
+                .success(function (data) {
+                    if (data.result.success) {
+
+                        $scope.contents = data.result.group_contents;
+                        $scope.contentLoading = false;
+
+                    } else
+                        console.log(data);
+                }).error(function (error) {
+                    console.log(error);
+                });
+        };
+        $scope.groupLoaded.then(function () {
+            if ($scope.groupOwner || $scope.groupJoined)
+                loadContent();
+        });
 
         $scope.uploadfile = function () {
             $scope.isUploading = true;
@@ -393,14 +615,14 @@ angular.module('esn')
                 'Groupcontent': {
                     'title': $scope.new_title,
                     'description': $scope.new_description,
-                    'group_id': $scope.Group.groupData.id,
+                    'group_id': $scope.Group.id,
                     content_id: $scope.$fileStatus.content_id
                 }
             };
             $http.post('http://esnback.com/groupcontents/add.json', $formData, {withCredentials: true})
                 .success(function (data) {
                     if (data.result.success) {
-                        $scope.contents.push(data.result.content);
+                        $scope.contents.unshift(data.result.content);
                     }
                     console.log(data);
                 }
@@ -410,16 +632,6 @@ angular.module('esn')
             );
         };
 
-
-        $http.get('http://esnback.com/groupcontents/getByGroup/' + $scope.Group.groupData.id + '.json', {withCredentials: true})
-            .success(function (data) {
-                if (data.result.success) {
-                    $scope.contents = data.result.group_contents;
-                }
-                console.log(data);
-            }).error(function (error) {
-                console.log(error);
-            });
 
         $scope.deleteContent = function (id, $index) {
             $http.delete('http://esnback.com/groupcontents/delete/' + id + '.json', {withCredentials: true})
@@ -432,13 +644,29 @@ angular.module('esn')
                 });
         }
     })
-    .controller('GroupTasksController', function ($scope, $http, $Auth, fileUpload) {
+    .controller('GroupTasksController', function ($scope, $http, $Auth, fileUpload, $interval) {
         $scope.tasks = {};
         $scope.$fileStatus = {
             isUploaded: false,
             content_id: null,
             content_path: null
         };
+        $scope.server_time = {};
+        var getTime = true;
+        $interval(function () {
+            if (getTime) {
+                getTime = false;
+                $http.get('http://esnback.com/tasks/gettime.json')
+                    .success(function (data) {
+                        if (data.result.success) {
+                            $scope.server_time = data.result.server_time;
+                            getTime = true;
+                        }
+                    })
+                    .error();
+
+            }
+        }, 100);
         $scope.fileStatus = 'No file';
         $scope.isUploading = false;
 
@@ -458,20 +686,42 @@ angular.module('esn')
                 $scope.isUploading = false;
             });
         };
+
+        $scope.loadingTasks = false;
+        var loadTasks = function () {
+            $scope.loadingTasks = true;
+            $http.get('http://esnback.com/tasks/getbygroup/' + $scope.Group.id + '.json', {withCredentials: true})
+                .success(function (data) {
+                    if (data.result.success) {
+
+                        $scope.tasks = data.result.tasks;
+                        $scope.loadingTasks = false;
+                    } else {
+                        console.log(data);
+                        $scope.loadingTasks = false;
+                    }
+                }).error(function (error) {
+                    console.log(error);
+                });
+        };
+        $scope.groupLoaded.then(function () {
+            if ($scope.groupOwner || $scope.groupJoined)
+                loadTasks();
+        });
         $scope.createTask = function () {
             var $formData = {
                 'Task': {
                     'title': $scope.new_title,
                     'description': $scope.new_description,
                     'enddate': $scope.new_datetime,
-                    'group_id': $scope.Group.groupData.id,
+                    'group_id': $scope.Group.id,
                     'content_id': $scope.$fileStatus.content_id
                 }
             };
             $http.post('http://esnback.com/tasks/add.json', $formData, {withCredentials: true})
                 .success(function (data) {
                     if (data.result.success) {
-                        $scope.tasks.push(data.result.task);
+                        $scope.tasks.unshift(data.result.task);
                     }
                     console.log(data);
                 }
@@ -482,15 +732,6 @@ angular.module('esn')
         };
 
 
-        $http.get('http://esnback.com/tasks/getbygroup/' + $scope.Group.groupData.id + '.json', {withCredentials: true})
-            .success(function (data) {
-                if (data.result.success) {
-                    $scope.tasks = data.result.tasks;
-                }
-                console.log(data);
-            }).error(function (error) {
-                console.log(error);
-            });
         $scope.viewSolutions = function (task_id) {
             $scope.data.task_id = task_id;
             $scope.data.view = './views/group/solutions.html';
@@ -541,12 +782,13 @@ angular.module('esn')
                 $formData.Solution.id = $scope.solution_id;
                 $http.post('http://esnback.com/solutions/edit/' + $scope.solution_id + '.json', $formData, {withCredentials: true})
                     .success(function (data) {
+                        console.log(data);
+
                         if (data.result.success) {
                             $scope.solutionUploaded = true;
                             $scope.resubmit = false;
                             $scope.solution_id = data.result.solution_id;
                         }
-                        console.log(data);
                     }
                 ).error(function (error) {
                         console.log(error);
@@ -555,12 +797,12 @@ angular.module('esn')
             } else {
                 $http.post('http://esnback.com/solutions/add.json', $formData, {withCredentials: true})
                     .success(function (data) {
+                        console.log(data);
                         if (data.result.success) {
                             $scope.solutionUploaded = true;
                             $scope.resubmit = false;
                             $scope.solution_id = data.result.solution_id;
                         }
-                        console.log(data);
                     }
                 ).error(function (error) {
                         console.log(error);
@@ -593,4 +835,140 @@ angular.module('esn')
         }
 
 
-    });
+    }).controller('GroupRequestsController', function ($scope, $http) {
+        $scope.data.requests = [];
+        $scope.loadingRequests = false;
+        var loadRequests = function () {
+            $scope.loadingRequests = true;
+            $http.get('http://esnback.com/groups/getrequests/' + $scope.Group.id + '.json', {withCredentials: true})
+                .success(function (data) {
+                    if (data.result.success) {
+                        $scope.data.requests = data.result.requests;
+                        $scope.loadingRequests = false;
+                    } else {
+                        console.log(data);
+                        $scope.loadingRequests = false;
+                    }
+                }).error(function (error) {
+                    console.log(error);
+                });
+        };
+        $scope.groupLoaded.then(function () {
+            if ($scope.groupOwner)
+                loadRequests();
+        });
+        $scope.processingRequest = false;
+        $scope.acceptRequest = function ($JoinRequest, $index) {
+            $scope.processingRequest = true;
+
+            var $formData = {
+                JoinRequest: $JoinRequest
+            };
+            $http.post('http://esnback.com/groups/acceptRequest.json', $formData, {withCredentials: true})
+                .success(function (data) {
+                    if (data.result.success) {
+                        $scope.data.requests.splice($index, 1);
+                        $scope.processingRequest = false;
+                    } else {
+                        console.log(data);
+                        $scope.processingRequest = false;
+                    }
+                }).error(function (error) {
+                    console.log(error);
+                });
+        };
+
+        $scope.processingRequest = false;
+        $scope.rejectRequest = function ($JoinRequest, $index) {
+            $scope.processingRequest = true;
+
+            var $formData = {
+                JoinRequest: $JoinRequest
+            };
+            $http.post('http://esnback.com/groups/rejectRequest.json', $formData, {withCredentials: true})
+                .success(function (data) {
+                    if (data.result.success) {
+                        $scope.data.requests.splice($index, 1);
+                        $scope.processingRequest = false;
+                    } else {
+                        console.log(data);
+                        $scope.processingRequest = false;
+                    }
+                }).error(function (error) {
+                    console.log(error);
+                });
+        };
+    }).controller('EditGroupController', function ($scope, $http, $location, $routeParams) {
+        $scope.form = {};
+        $scope.form.privacy = 1;
+        $scope.form.interests = [];
+        $scope.form.selectedInterest = null;
+        var $group = {};
+        $http.get('http://esnback.com/groups/getById/' + $routeParams.group_id + '.json', {withCredentials: true})
+            .success(function (data) {
+                if (!angular.isUndefined(data.result.success) && data.result.success) {
+                    $group = data.result.group;
+                    $scope.form.privacy = $group.Group.groupprivacy_id;
+                    $scope.form.interests = $group.Interest;
+                    $scope.form.title = $group.Group.title;
+                    $scope.form.description = $group.Group.description;
+
+                } else {
+                    console.log();
+                }
+            }).error(function (error) {
+                console.log(error);
+            });
+        $scope.addInterest = function () {
+            if (!angular.isUndefined($scope.form.selectedInterest) && $scope.form.selectedInterest != null) {
+                var $interest = $scope.form.selectedInterest.originalObject;
+                console.log($interest.Interest);
+                $scope.form.interests.push($interest.Interest);
+            }
+        };
+        $scope.deleteInterest = function (id, $index) {
+            $http.delete('http://esnback.com/groups/deleteInterest/' + id + '/' + $routeParams.group_id + '.json', {withCredentials: true})
+                .success(function (data) {
+                    if (data.result.success) {
+                        $scope.form.interests.splice($index, 1);
+                    }
+                }).error(function (error) {
+                    console.log(error);
+                });
+        };
+        var getInterestsIdArray = function () {
+            var result = [];
+            for (var i = 0; i < $scope.form.interests.length; i++) {
+                result.push($scope.form.interests[i].id);
+            }
+            return result;
+        };
+        var getFormJson = function () {
+
+            return {
+                Group: {
+                    id: $group.Group.id,
+                    title: $scope.form.title,
+                    description: $scope.form.description,
+                    groupprivacy_id: $scope.form.privacy
+
+                },
+                Interest: getInterestsIdArray()
+            };
+        };
+        $scope.edit_group = function () {
+            var $formData = getFormJson();
+            $http.post('http://esnback.com/groups/edit/' + $routeParams.group_id + '.json', $formData, {withCredentials: true})
+                .success(function (data) {
+                    console.log(data);
+                    if (data.result.success) {
+                        $location.path('/group/' + $routeParams.group_id);
+                    }
+                })
+                .error(function (error) {
+                    console.log(error);
+                });
+        };
+
+    })
+;

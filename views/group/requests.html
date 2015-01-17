@@ -1,0 +1,71 @@
+<style>
+    .user-info {
+        position: relative;
+        overflow: auto;
+        text-align: center;
+    }
+
+    .user-info > img {
+        position: relative;
+        float: left;
+        width: 50px;
+    }
+
+    .user-info > h2 {
+        position: relative;
+        float: left;
+        margin-left: 5px;
+        font-size: 16px;
+        font-weight: bold;
+    }
+</style>
+<div ng-controller="GroupRequestsController">
+    <div ng-hide="loadingRequests">
+        <div class="row">
+            <div dir-paginate="request in data.requests|itemsPerPage:2" class="col-md-6 panel">
+                <div class=" col-md-8  user-post">
+                    <div class="user-info">
+                        <img class="img-circle" ng-src="{{request.User.profilephoto_thumb}}"/>
+
+                        <h2 class="timesnewroman">
+                            <a ng-href="#/profile/{{request.User.username}}">
+                                {{request.User.firstname+' '+request.User.lastname}}
+                            </a>
+                        </h2>
+                    </div>
+                </div>
+                <div ng-hide="processingRequest">
+                    <div class="col-md-2 padding-top-10px">
+                        <a class="btn color-green" ng-click="acceptRequest(request.JoinRequest,$index)">
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        </a>
+                    </div>
+                    <div class="col-md-2 padding-top-10px">
+                        <a class="btn color-red" ng-click="rejectRequest(request.JoinRequest,$index)">
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-4" ng-show="processingRequest">
+                    <div class="sk-spinner sk-spinner-wave">
+                        <div class="sk-rect1"></div>
+                        <div class="sk-rect2"></div>
+                        <div class="sk-rect3"></div>
+                        <div class="sk-rect4"></div>
+                        <div class="sk-rect5"></div>
+                    </div>
+                </div>
+
+            </div>
+            <dir-pagination-controls></dir-pagination-controls>
+        </div>
+    </div>
+    <div class="sk-spinner sk-spinner-wave" ng-show="loadingRequests">
+        <div class="sk-rect1"></div>
+        <div class="sk-rect2"></div>
+        <div class="sk-rect3"></div>
+        <div class="sk-rect4"></div>
+        <div class="sk-rect5"></div>
+    </div>
+
+</div>

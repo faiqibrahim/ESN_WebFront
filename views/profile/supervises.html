@@ -38,22 +38,25 @@
 
 </style>
 <div class="row group-posts">
-    <div class=" col-md-5 col-md-offset-1 panel box-shadow-green " ng-repeat="group in Auth.user.Group">
+    <div class=" col-md-5 col-md-offset-1 panel box-shadow-green " dir-paginate="group in Auth.user.Group|itemsPerPage:10">
 
         <div class="group-info">
 
             <h2 class="my-font darkgreen font-size-16">
-                <a class="darkgreen underline" ng-href="http://esn.com/#/group/{{group.Group.id}}">
-                    {{group.Group.title}}
+                <a class="darkgreen underline" ng-href="http://esn.com/#/group/{{group.id}}">
+                    {{group.title}}
                 </a>
             </h2>
 
         </div>
 
         <div class="content-space timesnewroman center-text">
-            <p class="lead timesnewroman font-size-12">{{group.Group.description}}</p>
+            <p class="lead timesnewroman font-size-12">{{group.description}}</p>
         </div>
 
+    </div>
+    <div class="col-md-12">
+        <dir-pagination-controls></dir-pagination-controls>
     </div>
 
 

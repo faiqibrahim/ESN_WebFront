@@ -99,7 +99,12 @@
                                ng-click="uploadFileType('profile')"/>
                     </div>
 
-                    <h1 class="">{{profile.user.firstname+" "+profile.user.lastname}}</h1>
+                    <h1 class="">
+                        {{profile.user.firstname+" "+profile.user.lastname}}
+                        <a class="btn btn-primary" ng-hide="selfProfile" ng-href="#/inbox/{{profile.user.username}}">
+                            <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+                        </a>
+                    </h1>
                     <a class="btn btn-sm btn-primary" ng-click="connectUser()" ng-hide="selfProfile || connectedUser">Connect</a>
                     <a class="btn btn-sm btn-danger" ng-click="disconnectUser()"
                        ng-show="!selfProfile && connectedUser">Disconnect</a>

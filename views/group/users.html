@@ -22,18 +22,48 @@
 </style>
 <div ng-controller="GroupUsersController" ng-show="groupOwner || groupJoined">
     <div class="row">
-        <div ng-repeat="user in users">
-            <div class=" col-md-3  user-post">
-                <div class="user-info">
+        <div ng-hide="usersLoading">
+            <div ng-repeat="user in users">
+                <div class=" col-md-6 row user-post">
+                    <div class="user-info col-md-12">
 
                         <img class="img-circle" ng-src="{{user.User.profilephoto_thumb}}"/>
 
-                        <h2 class="timesnewroman"><a ng-href="#/profile/{{user.User.username}}">{{user.User.firstname+' '+user.User.lastname}}</a></h2>
+                        <h2 class="timesnewroman row">
+                            <div class="col-md-8">
+                                <a ng-href="#/profile/{{user.User.username}}">
+                                    {{user.User.firstname+' '+user.User.lastname}}
+                                </a>
+                            </div>
+                            <div class="col-md-2" ng-hide="removeProcessing">
+                                <a class="btn color-red" ng-show="groupOwner" ng-click="removeUser(user.User.id)">
+                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                </a>
+                            </div>
+                            <div class="col-md-2" ng-show="removeProcessing">
+                                <div class="sk-spinner sk-spinner-wave">
+                                    <div class="sk-rect1"></div>
+                                    <div class="sk-rect2"></div>
+                                    <div class="sk-rect3"></div>
+                                    <div class="sk-rect4"></div>
+                                    <div class="sk-rect5"></div>
+                                </div>
+                            </div>
+                        </h2>
 
+
+                    </div>
 
                 </div>
-
             </div>
         </div>
+        <div class="sk-spinner sk-spinner-wave" ng-show="usersLoading">
+            <div class="sk-rect1"></div>
+            <div class="sk-rect2"></div>
+            <div class="sk-rect3"></div>
+            <div class="sk-rect4"></div>
+            <div class="sk-rect5"></div>
+        </div>
+
     </div>
 </div>

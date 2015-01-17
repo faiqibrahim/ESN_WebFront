@@ -35,14 +35,16 @@ angular.module('esn')
 
         var loadData = function () {
             $scope.loadingSummary = true;
-            $http.get('http://esnback.com/messages/inboxSummary.json', {withCredentials: true})
+            $http.get('http://esnback.com/chats/getSummary.json', {withCredentials: true})
                 .success(function (data) {
                     if (data.result.success) {
-                        $scope.messagesSummary = data.result.users_messages;
+                        $scope.messagesSummary = data.result.summary;
                         $scope.loadingSummary = false;
                     } else {
                         console.log(data);
+						$scope.loadingSummary = false;
                     }
+                    console.log(data);
                 }).error(function (error) {
                     console.log(error);
                 });
@@ -57,10 +59,10 @@ angular.module('esn')
             User: []
         };
         $scope.loadingMessages = false;
-
+        $scope.sendingMessage = false;
         $scope.user = {};
         $scope.contact = {};
-
+        var previousReference = {};
         var getContactId = function ($users) {
             var id1 = $users[0]['id'];
             var id2 = $users[1]['id'];
@@ -77,6 +79,27 @@ angular.module('esn')
                 return null;
             }
         };
+        var interval_id = window.setInterval(function () {
+            var elem = angular.element('#my-scroll')[0];
+            elem.scrollTop = elem.scrollHeight;
+        }, 2000);
+
+        var reScroll = true;
+        angular.element('#my-scroll').scroll(function () {
+            clearInterval(interval_id);
+            if (reScroll) {
+                $scope.$broadcast('rebuild:scrollbar');
+                reScroll=false;
+            }
+
+        });
+
+
+        $scope.$on('rebuild:scrollbar', function () {
+            var elem = angular.element('#my-scroll')[0];
+            elem.scrollTop = elem.scrollHeight;
+        });
+
         $scope.getUser = function ($id) {
             return $id == $Auth.getUser('id') ? $scope.user : $scope.contact;
         };
@@ -90,11 +113,16 @@ angular.module('esn')
                         $contact_id = getContactId($scope.chat.User);
                         $scope.loadingMessages = false;
                         $scope.$broadcast('rebuild:scrollbar');
+                        if ($scope.chat.Message.length != 0) {
+                            previousReference = $scope.chat.Message[0];
+                        }
                     } else {
                         console.log(data);
                     }
                 }).error(function (error) {
                     console.log(error);
+                }).finally(function () {
+                    $scope.$broadcast('rebuild:scrollbar');
                 });
 
         };
@@ -102,6 +130,7 @@ angular.module('esn')
 
         $scope.sendMessage = function () {
             var $message = $scope.new_message;
+            $scope.sendingMessage = true;
             if ($contact_id != null) {
                 var $formData = {
                     Message: {
@@ -115,6 +144,11 @@ angular.module('esn')
                             $scope.chat.Message.push(data.result.Message);
                             $scope.new_message = '';
                             $scope.$broadcast('rebuild:scrollbar');
+                            reScroll=true;
+                            if ($scope.chat.Message.length != 0) {
+                                previousReference = $scope.chat.Message[0];
+                            }
+                            $scope.sendingMessage = false;
 
                         } else {
                             console.log(data);
@@ -151,10 +185,8 @@ angular.module('esn')
                             }
                             _loadNext = true;
                             $scope.loadingMessages = false;
-                            $scope.$broadcast('rebuild:scrollbar');
                         } else {
                             _loadNext = true;
-                            console.log(data);
                         }
                     }).error(function (error) {
                         console.log(error);
@@ -166,7 +198,7 @@ angular.module('esn')
             var $formData = {
                 Chat: $scope.chat.Chat,
                 Message: {
-                    last_message: $scope.chat.Message[0]
+                    last_message: previousReference
                 }
             };
             if (angular.isUndefined($formData.Message.last_message)) {
@@ -182,7 +214,6 @@ angular.module('esn')
                             $scope.chat.Message.unshift($messages[i]);
                         }
                         $scope.loadingMessages = false;
-                        $scope.$broadcast('rebuild:scrollbar');
                     } else {
                         console.log(data);
                     }
@@ -198,7 +229,9 @@ angular.module('esn')
                     if (data.result.success) {
                         $scope.chat.Message.splice($index, 1);
                         $scope.loadingMessages = false;
-                        $scope.$broadcast('rebuild:scrollbar');
+                        if ($scope.chat.Message.length != 0) {
+                            previousReference = $scope.chat.Message[0];
+                        }
                     } else {
                         console.log(data);
                     }
@@ -208,9 +241,18 @@ angular.module('esn')
         }
         ;
 
-    }).
-    controller('ScrollController', function ($scope, $location, $anchorScroll) {
+    })
+    .filter('sortByDate', function () {
+        return function (data) {
+            for (var i = 1; i < data.length; i++) {
+                for (var k = i; k > 0 && data[k]['Chat']['modified'] > data[k - 1]['Chat']['modified']; k--) {
+                    var temp = data[k];
+                    data[k] = data[k - 1];
+                    data[k - 1] = temp;
+                }
 
-        $scope.gotoBottom();
-    }
-);
+            }
+            return data;
+        }
+    })
+;

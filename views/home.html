@@ -64,13 +64,15 @@
 
             </div>
             <div class="row user-posts" ng-hide="inProcess">
-                <div class=" col-md-5 col-md-offset-1 panel user-post" ng-repeat="post in data.posts">
+                <div class=" col-md-5 col-md-offset-1 panel user-post"
+                     dir-paginate="post in data.posts|itemsPerPage:20">
                     <div class="user-info padding-10">
                         <img class="img-circle" ng-src="{{post.User.profilephoto_thumb}}"/>
 
                         <h2 class="timesnewroman">
-                            <a ng-href="#/profile/{{post.User.username}}">{{post.User.firstname +' '+
-                                post.User.lastname}}</a>
+                            <a ng-href="#/profile/{{post.User.username}}">
+                                {{post.User.firstname +' '+post.User.lastname}}
+                            </a>
                             <br/>
                             <span class="small">{{post.Post.modified}}</span>
                         </h2>
@@ -91,10 +93,11 @@
                         </a>
                     </div>
                     <div class="content-space timesnewroman" ng-hide="isEditable(post.Post.id)">
-                        <a class="btn btn-sm btn-primary" ng-show="post.Group.id" ng-href="#/group/{{post.Group.id}}">Group Post</a>
-                            <a ng-show="post.Content.id" ng-href="{{post.Content.content}}">Download Attachment</a>
-                            <br/>
-                            <span class="lead font-size-16 padding-10">{{post.Post.post}}</span>
+                        <a class="btn btn-sm btn-primary" ng-show="post.Group.id" ng-href="#/group/{{post.Group.id}}">Group
+                            Post</a>
+                        <a ng-show="post.Content.id" ng-href="{{post.Content.content}}">Download Attachment</a>
+                        <br/>
+                        <span class="lead font-size-16 padding-10">{{post.Post.post}}</span>
 
                     </div>
                     <div ng-show="isEditable(post.Post.id)" ng-controller="HomeEditPostController">
@@ -120,6 +123,9 @@
                     </div>
 
                 </div>
+                <div class="col-md-12">
+                    <dir-pagination-controls></dir-pagination-controls>
+                </div>
             </div>
             <div class="sk-spinner sk-spinner-wave" ng-show="inProcess">
                 <div class="sk-rect1"></div>
@@ -133,7 +139,6 @@
 
         <div class="col-md-2"></div>
     </div>
-
 
 
 </div>

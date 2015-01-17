@@ -29,20 +29,4 @@ angular.module('esn').controller('mainCtrl', function ($scope, $http, localStora
         };
 
 
-    })
-    .filter('sort-id', function () {
-        return function (data) {
-            for (var i = 1; i < data.length; i++) {
-                for (var k = i; k > 0 && data[k]['id'] < data[k - 1]['id']; k--) {
-                    var temp = data[k];
-                    data[k] = data[k - 1];
-                    data[k - 1] = temp;
-                }
-
-            }
-            return data;
-
-        };
-
-
     });

@@ -55,25 +55,52 @@
 
                 </div>
             </div>
-            <div class="panel padding-10 margin-5px   my-font box-shadow-green question"
-                 ng-repeat="question in data.questions">
-                <p class="lead timesnewroman font-size-12 content-space"><span class="capital-big">Q:</span>{{question.question}}
-                </p>
-                <a ng-click="viewAnswers(question.id)" ng-hide="viewAnswers[question.id]">View Answers</a>
-                <a ng-click="hideAnswers(question.id)" ng-show="viewAnswers[question.id]">Hide Answers</a>
-                <span>{{question.created}}</span>
-                <div ng-show="viewAnswers[question.id]">
-                    <div class="answer" ng-repeat="answer in answers[question.id]">
-                        {{answer.Answer.answer}}
-                    </div>
-                    <div class="form-group" ng-show="groupOwner">
+            <div ng-hide="loadingQuestions">
+                <div class="panel padding-10 margin-5px   my-font box-shadow-green question"
+                     dir-paginate="question in data.questions|itemsPerPage:5">
+                    <p class="lead timesnewroman font-size-12 content-space"><span class="capital-big">Q:</span>
+                        {{question.Question.question}}
+                        <br/>
+                        <span class="small my-font color-green">By:
+                            <a ng-href="#/profile/{{question.User.username}}">
+                                {{question.User.firstname+" "+question.User.lastname}}
+                            </a>
+                        </span>
+                    </p>
 
-                        <textarea class="form-control" ng-model="new_answer"></textarea>
-                        <a class="btn btn-success btn-sm " ng-click="addAnswer(question.id,new_answer)">Answer</a>
+                    <a ng-click="viewAnswers(question.Question.id)" ng-hide="viewAnswers[question.Question.id]">View
+                        Answers</a>
+                    <a ng-click="hideAnswers(question.Question.id)" ng-show="viewAnswers[question.Question.id]">Hide
+                        Answers</a>
+                    <span>{{question.Question.created}}</span>
+
+                    <div ng-show="viewAnswers[question.Question.id]">
+                        <div class="answer" ng-repeat="answer in answers[question.Question.id]">
+                            {{answer.Answer.answer}}
+                            <br/>
+                        <span class="small my-font color-green">By:
+                            <a ng-href="#/profile/{{answer.User.username}}">
+                                {{answer.User.firstname+" "+answer.User.lastname}}
+                            </a>
+                        </span>
+                        </div>
+                        <div class="form-group" ng-show="groupJoined || groupOwner">
+
+                            <textarea class="form-control" ng-model="new_answer"></textarea>
+                            <a class="btn btn-success btn-sm " ng-click="addAnswer(question.Question.id,new_answer)">Answer</a>
+                        </div>
                     </div>
+
+
                 </div>
-
-
+                <dir-pagination-controls>
+            </div>
+            <div class="sk-spinner sk-spinner-wave" ng-show="loadingQuestions">
+                <div class="sk-rect1"></div>
+                <div class="sk-rect2"></div>
+                <div class="sk-rect3"></div>
+                <div class="sk-rect4"></div>
+                <div class="sk-rect5"></div>
             </div>
         </div>
         <div class="col-lg-1">
